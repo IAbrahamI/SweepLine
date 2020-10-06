@@ -40,14 +40,15 @@ public class Controller {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long nanotime) {
-                    y1++;
-                    y2++;
-                    for(Dot d : dots){
-                       scannForCollision(d.getX(),d.getY());
-                    }
-                    context.clearRect(x1,y1-1,x2,2);
-                    context.strokeLine(x1,y1,x2,y2);
-                    context.setStroke(Color.RED);
+            y1++;
+            y2++;
+            for(Dot d : dots){
+               scannForCollision(d.getX(),d.getY());
+            }
+            context.clearRect(x1,y1-1,x2,1);
+            context.strokeLine(x1,y1,x2,y2);
+            context.setStroke(Color.RED);
+            context.moveTo(x1,y1);
             }
         };
         timer.start();
@@ -63,7 +64,7 @@ public class Controller {
     public void createRandomDots(){
         for(int i=1;i<=10;i++){
             int randomXValue = rd.nextInt(440);
-            int randomYValue = rd.nextInt(590);
+            int randomYValue = rd.nextInt(570);
             this.addDot(randomXValue,randomYValue);
         }
 //        for(Dot d : dots){
@@ -85,7 +86,6 @@ public class Controller {
     public void scannForCollision(int x, int y){
         if(this.y1 == y && this.y2 == y){
             System.out.println("Line collided with dot");
-            context = canvas.getGraphicsContext2D();
             context.strokeOval(x-15,y-15,30,30);
         }else{
         }
