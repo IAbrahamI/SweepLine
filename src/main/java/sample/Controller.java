@@ -31,7 +31,6 @@ public class Controller {
     void startAction(ActionEvent event) {
         this.strokeSweepLine();
     }
-
     //---------------------------------------------------------------------
     public void strokeSweepLine() {
         context = canvas.getGraphicsContext2D();
@@ -43,23 +42,25 @@ public class Controller {
         AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long nanotime) {
+
                 y1++;
                 y2++;
-
                 context.setFill(Color.WHITE);
-                context.fillRect(0,0,450,600);
+                context.fillRect(0, 0, 450, 600);
 
                 strokeDots();
-                for(Dot d : dots){
-                    scannForCollision(d.getX(),d.getY());
+                for (Dot d : dots) {
+                    scannForCollision(d.getX(), d.getY());
                 }
 
-                for(Dot d: activadedDots){
-                    context.strokeOval(d.getX()-15,d.getY()-15,36,36);
+                for (Dot d : activadedDots) {
+                    context.strokeOval(d.getX() - 15, d.getY() - 15, 36, 36);
+                    // Voronoi Shit
+
                 }
 
                 context.setStroke(Color.RED);
-                context.strokeLine(x1,y1,x2,y2);
+                context.strokeLine(x1, y1, x2, y2);
 
             }
         };
@@ -76,7 +77,6 @@ public class Controller {
     public void addActivaedDot(int x, int y) {
         activadedDots.add(new Dot(x, y));
     }
-
     //---------------------------------------------------------------------
     public void createRandomDots() {
         for (int i = 1; i <= 10; i++) {
@@ -103,4 +103,7 @@ public class Controller {
         }
     }
     //---------------------------------------------------------------------
+    public void draw(){
+        System.out.println();
+    }
 }
