@@ -54,7 +54,7 @@ public class Controller {
                     scannForCollision(d.getX(),d.getY());
                 }
 
-                for(Dot d: dots){
+                for(Dot d: activadedDots){
                     context.strokeOval(d.getX()-15,d.getY()-15,36,36);
                 }
 
@@ -68,7 +68,6 @@ public class Controller {
             timer.stop();
         }
     }
-
     //---------------------------------------------------------------------
     public void addDot(int x, int y) {
         dots.add(new Dot(x, y));
@@ -85,11 +84,7 @@ public class Controller {
             int randomYValue = rd.nextInt(570);
             this.addDot(randomXValue + 3, randomYValue + 3);
         }
-//        for(Dot d : dots){
-//            System.out.println("X: "+d.getX()+" Y: "+d.getY());
-//        }
     }
-
     //---------------------------------------------------------------------
     public void strokeDots() {
         context = canvas.getGraphicsContext2D();
@@ -100,10 +95,8 @@ public class Controller {
             context.fillOval(d.getX(), d.getY(), 6, 6);
         }
     }
-
     //---------------------------------------------------------------------
     public void scannForCollision(int x, int y) {
-
         if (this.y1 == y && this.y2 == y) {
             this.addActivaedDot(x, y);
         } else {
