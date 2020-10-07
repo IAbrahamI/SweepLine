@@ -16,11 +16,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Richtigesdfsdfsdf" />
+        <module name="SweepLine" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Richtigesdfsdfsdf" target="1.5" />
+      <module name="SweepLine" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>
