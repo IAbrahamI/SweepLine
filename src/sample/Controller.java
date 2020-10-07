@@ -65,7 +65,7 @@ public class Controller {
         for(int i=1;i<=10;i++){
             int randomXValue = rd.nextInt(440);
             int randomYValue = rd.nextInt(570);
-            this.addDot(randomXValue,randomYValue);
+            this.addDot(randomXValue+3,randomYValue+3);
         }
 //        for(Dot d : dots){
 //            System.out.println("X: "+d.getX()+" Y: "+d.getY());
@@ -78,15 +78,15 @@ public class Controller {
         for(Dot d: dots){
             context.setStroke(Color.GREEN);
             context.setFill(Color.GREEN);
-            context.strokeOval(d.getX(),d.getY(),5,5);
-            context.fillOval(d.getX(),d.getY(),5,5);
+            context.strokeOval(d.getX(),d.getY(),6,6);
+            context.fillOval(d.getX(),d.getY(),6,6);
         }
     }
     //---------------------------------------------------------------------
     public void scannForCollision(int x, int y){
         if(this.y1 == y && this.y2 == y){
             System.out.println("Line collided with dot");
-            context.strokeOval(x-15,y-15,30,30);
+            context.strokeOval(x-15,y-15,36,36);
         }else{
         }
     }
