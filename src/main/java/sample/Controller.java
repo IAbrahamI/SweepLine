@@ -8,7 +8,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -20,11 +19,12 @@ public class Controller {
     @FXML
     private Canvas canvas;
 
+    private boolean hasEnded = false;
     private double x1, y1, x2, y2;
     private Random rd = new Random();
     private GraphicsContext context;
     private ArrayList<Dot> dots = new ArrayList<Dot>();
-    private ArrayList<Dot> activadedDots = new ArrayList<Dot>();
+    private ArrayList<Dot> activatedDots = new ArrayList<Dot>();
 
     //---------------------------------------------------------------------
     @FXML
@@ -46,28 +46,29 @@ public class Controller {
                 y1++;
                 y2++;
                 context.setFill(Color.WHITE);
-                context.fillRect(0, 0, 450, 600);
+                context.fillRect(0, 0, 450, 550);
 
                 strokeDots();
                 for (Dot d : dots) {
                     scannForCollision(d.getX(), d.getY());
                 }
 
-                for (Dot d : activadedDots) {
+                for (Dot d : activatedDots) {
                     context.strokeOval(d.getX() - 15, d.getY() - 15, 36, 36);
                     // Voronoi Shit
 
                 }
-
                 context.setStroke(Color.RED);
                 context.strokeLine(x1, y1, x2, y2);
-
+                System.out.println(y1);
+                System.out.println(y2);
+                if (y1 >= 550 && y2 >= 550) {
+                    deleteDots();
+                    hasEnded = true;
+                }
             }
         };
         timer.start();
-        if (x1 > 600 && x2 > 600) {
-            timer.stop();
-        }
     }
     //---------------------------------------------------------------------
     public void addDot(int x, int y) {
@@ -75,13 +76,22 @@ public class Controller {
     }
 
     public void addActivaedDot(int x, int y) {
-        activadedDots.add(new Dot(x, y));
+        activatedDots.add(new Dot(x, y));
+    }
+
+    public void deleteDots(){
+        for(Dot d : dots){
+            dots.clear();
+        }
+        for(Dot d : activatedDots){
+            activatedDots.clear();
+        }
     }
     //---------------------------------------------------------------------
     public void createRandomDots() {
         for (int i = 1; i <= 10; i++) {
             int randomXValue = rd.nextInt(440);
-            int randomYValue = rd.nextInt(570);
+            int randomYValue = rd.nextInt(530);
             this.addDot(randomXValue + 3, randomYValue + 3);
         }
     }
@@ -104,6 +114,7 @@ public class Controller {
     }
     //---------------------------------------------------------------------
     public void draw(){
-        System.out.println();
+
     }
+    //---------------------------------------------------------------------
 }
