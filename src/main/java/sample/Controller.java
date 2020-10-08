@@ -19,7 +19,7 @@ public class Controller {
     @FXML
     private Canvas canvas;
 
-    private double x1, y1, x2, y2;
+    private double x1, y1, x2, y2, xParabole;
     private Random rd = new Random();
     private GraphicsContext context;
     private ArrayList<Dot> dots = new ArrayList<Dot>();
@@ -53,13 +53,13 @@ public class Controller {
                 }
 
                 for (Dot d : activatedDots) {
-                    //context.strokeOval(d.getX() - 15, d.getY() - 15, 36, 36);
                     // Voronoi Shit
                     context.beginPath();
-                    context.moveTo(d.getX()-10,0);
-                    context.quadraticCurveTo(d.getX()+5,d.getY()+20,d.getX()+10,0);
+                    context.moveTo(d.getX()-d.getxParaboleValue(),0);
+                    context.quadraticCurveTo(d.getX()+6,d.getY()+(d.getY()+50),d.getX()+d.getxParaboleValue(),0);
                     context.setStroke(Color.GREEN);
                     context.stroke();
+                    d.setxParaboleValue(d.getxParaboleValue()+1);
                 }
                 context.setStroke(Color.RED);
                 context.strokeLine(x1, y1, x2, y2);
@@ -76,8 +76,8 @@ public class Controller {
         dots.add(new Dot(x, y));
     }
 
-    public void addActivatedDot(int x, int y) {
-        activatedDots.add(new Dot(x, y));
+    public void addActivatedDot(int x, int y, double xParabole) {
+        activatedDots.add(new Dot(x, y, xParabole));
     }
 
     public void deleteDots(){
@@ -109,7 +109,8 @@ public class Controller {
     //---------------------------------------------------------------------
     public void scannForCollision(int x, int y) {
         if (this.y1 == y && this.y2 == y) {
-            this.addActivatedDot(x, y);
+            xParabole = 0;
+            this.addActivatedDot(x, y, xParabole);
         } else {
         }
     }
