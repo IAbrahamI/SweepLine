@@ -19,7 +19,6 @@ public class Controller {
     @FXML
     private Canvas canvas;
 
-    private boolean hasEnded = false;
     private double x1, y1, x2, y2;
     private Random rd = new Random();
     private GraphicsContext context;
@@ -54,17 +53,19 @@ public class Controller {
                 }
 
                 for (Dot d : activatedDots) {
-                    context.strokeOval(d.getX() - 15, d.getY() - 15, 36, 36);
+                    //context.strokeOval(d.getX() - 15, d.getY() - 15, 36, 36);
                     // Voronoi Shit
-
+                    context.beginPath();
+                    context.moveTo(d.getX()-10,0);
+                    context.quadraticCurveTo(d.getX()+5,d.getY()+20,d.getX()+10,0);
+                    context.setStroke(Color.GREEN);
+                    context.stroke();
                 }
                 context.setStroke(Color.RED);
                 context.strokeLine(x1, y1, x2, y2);
-                System.out.println(y1);
-                System.out.println(y2);
+
                 if (y1 >= 550 && y2 >= 550) {
-                    deleteDots();
-                    hasEnded = true;
+                    //deleteDots();
                 }
             }
         };
@@ -75,7 +76,7 @@ public class Controller {
         dots.add(new Dot(x, y));
     }
 
-    public void addActivaedDot(int x, int y) {
+    public void addActivatedDot(int x, int y) {
         activatedDots.add(new Dot(x, y));
     }
 
@@ -90,7 +91,7 @@ public class Controller {
     //---------------------------------------------------------------------
     public void createRandomDots() {
         for (int i = 1; i <= 10; i++) {
-            int randomXValue = rd.nextInt(440);
+            int randomXValue = rd.nextInt(430);
             int randomYValue = rd.nextInt(530);
             this.addDot(randomXValue + 3, randomYValue + 3);
         }
@@ -108,7 +109,7 @@ public class Controller {
     //---------------------------------------------------------------------
     public void scannForCollision(int x, int y) {
         if (this.y1 == y && this.y2 == y) {
-            this.addActivaedDot(x, y);
+            this.addActivatedDot(x, y);
         } else {
         }
     }
