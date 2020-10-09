@@ -90,7 +90,7 @@ public class Controller {
     }
     //---------------------------------------------------------------------
     public void createRandomDots() {
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 1; i <= 18; i++) {
             int randomXValue = rd.nextInt(430);
             int randomYValue = rd.nextInt(530);
             this.addDot(randomXValue + 3, randomYValue + 3);
