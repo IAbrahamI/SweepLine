@@ -85,7 +85,7 @@ public class Controller {
     }
     //---------------------------------------------------------------------
     public void createRandomDots() {
-        for (int i = 1; i <= 2; i++) {
+        for (int i = 1; i <=8; i++) {
             int randomXValue = rd.nextInt(430);
             int randomYValue = rd.nextInt(530);
             this.addDot(randomXValue + 3, randomYValue + 3);
@@ -119,14 +119,17 @@ public class Controller {
     public void drawParaboleforEachDot(){
         for (Dot d : activatedDots) {
 
-            this.addParabole(d.getX()-d.getxParaboleValue(),0,d.getX()+6,d.getY()+(d.getY()+50),d.getX()+d.getxParaboleValue(),0);
+            for(int i=-800; i<800; i++){
+                int x =  i;
+                double y = (x * x - d.getY()*20) / d.getY()/d.getxParaboleValue();
+                double answerX = d.getX()+x;
+                double answerY = d.getY()-y;
+                context.strokeOval(answerX,answerY,2,2);
+                context.fillOval(answerX,answerY,2,2);
+            }
 
-            context.beginPath();
-            context.moveTo(d.getX()-d.getxParaboleValue(),0);
-            context.quadraticCurveTo(d.getX()+6,d.getY()+(d.getY()+50),d.getX()+d.getxParaboleValue(),0);
             context.setStroke(Color.GREEN);
             context.stroke();
-
             d.setxParaboleValue(d.getxParaboleValue()+1);
         }
     }
