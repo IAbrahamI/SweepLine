@@ -10,6 +10,8 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Controller {
 
@@ -25,11 +27,13 @@ public class Controller {
     private ArrayList<Dot> dots = new ArrayList<Dot>();
     private ArrayList<Dot> activatedDots = new ArrayList<Dot>();
     private ArrayList<Parabole> paraboles = new ArrayList<Parabole>();
+
     //---------------------------------------------------------------------
     @FXML
     void startAction(ActionEvent event) {
         this.strokeSweepLine();
     }
+
     //---------------------------------------------------------------------
     public void strokeSweepLine() {
         context = canvas.getGraphicsContext2D();
@@ -51,6 +55,7 @@ public class Controller {
                 for (Dot d : dots) {
                     scannForLineDotCollision(d.getX(), d.getY());
                 }
+
                 drawParaboleforEachDot();
 
                 context.setStroke(Color.RED);
@@ -62,6 +67,7 @@ public class Controller {
         };
         timer.start();
     }
+
     //---------------------------------------------------------------------
     public void addDot(int x, int y) {
         dots.add(new Dot(x, y));
@@ -71,26 +77,24 @@ public class Controller {
         activatedDots.add(new Dot(x, y, xParabole));
     }
 
-    public void deleteDots(){
-        for(Dot d : dots){
+    public void deleteDots() {
+        for (Dot d : dots) {
             dots.clear();
         }
-        for(Dot d : activatedDots){
+        for (Dot d : activatedDots) {
             activatedDots.clear();
         }
     }
 
-    public void addParabole(double startX, double startY, double curveX, double curveY, double endX, double endY){
-        paraboles.add(new Parabole(startX,startY,curveX,curveY,endX,endY));
-    }
     //---------------------------------------------------------------------
     public void createRandomDots() {
-        for (int i = 1; i <=8; i++) {
+        for (int i = 1; i <= 8; i++) {
             int randomXValue = rd.nextInt(430);
             int randomYValue = rd.nextInt(530);
             this.addDot(randomXValue + 3, randomYValue + 3);
         }
     }
+
     //---------------------------------------------------------------------
     public void strokeDots() {
         context = canvas.getGraphicsContext2D();
@@ -101,6 +105,7 @@ public class Controller {
             context.fillOval(d.getX(), d.getY(), 6, 6);
         }
     }
+
     //---------------------------------------------------------------------
     public void scannForLineDotCollision(int x, int y) {
         if (this.yLine1 == y && this.yLine2 == y) {
@@ -109,28 +114,25 @@ public class Controller {
         } else {
         }
     }
+
     //---------------------------------------------------------------------
-    public void scannForParaboleCollision(double startX, double startY, double endX, double endY, double curveXpoint, double curveYpoint){
-        for(Parabole p : paraboles){
-            //for()
-        }
+    public void scannForParaboleCollision() {
+
     }
+
     //---------------------------------------------------------------------
-    public void drawParaboleforEachDot(){
+    public void drawParaboleforEachDot() {
+
         for (Dot d : activatedDots) {
-
-            for(int i=-800; i<800; i++){
-                int x =  i;
-                double y = (x * x - d.getY()*20) / d.getY()/d.getxParaboleValue();
-                double answerX = d.getX()+x;
-                double answerY = d.getY()-y;
-                context.strokeOval(answerX,answerY,2,2);
-                context.fillOval(answerX,answerY,2,2);
+            for (int i = -800; i < 800; i++) {
+                int x = i;
+                double y = (x * x - d.getY() * 20) / d.getY() / d.getxParaboleValue();
+                double answerX = d.getX() + x;
+                double answerY = d.getY() - y;
+                context.strokeOval(answerX, answerY, 2, 2);
+                context.fillOval(answerX, answerY, 2, 2);
             }
-
-            context.setStroke(Color.GREEN);
-            context.stroke();
-            d.setxParaboleValue(d.getxParaboleValue()+1);
+            d.setxParaboleValue(d.getxParaboleValue() + 1);
         }
     }
     //---------------------------------------------------------------------
