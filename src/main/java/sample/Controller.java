@@ -91,7 +91,7 @@ public class Controller {
         for (int i = 1; i <= 8; i++) {
             int randomXValue = rd.nextInt(430);
             int randomYValue = rd.nextInt(530);
-            this.addDot(randomXValue + 3, randomYValue + 3);
+            this.addDot(randomXValue, randomYValue);
         }
     }
 
@@ -117,22 +117,20 @@ public class Controller {
 
     //---------------------------------------------------------------------
     public void scannForParaboleCollision() {
-
     }
-
     //---------------------------------------------------------------------
     public void drawParaboleforEachDot() {
-
         for (Dot d : activatedDots) {
             for (int i = -800; i < 800; i++) {
-                int x = i;
-                double y = (x * x - d.getY() * 20) / d.getY() / d.getxParaboleValue();
-                double answerX = d.getX() + x;
-                double answerY = d.getY() - y;
-                context.strokeOval(answerX, answerY, 2, 2);
-                context.fillOval(answerX, answerY, 2, 2);
+                double a = 1 / (2*(d.getY()-this.yLine1));
+                double u = d.getX();
+                double v = 0.5*(d.getY()+this.yLine1);
+
+                double pointY = a*((i-u)*(i-u))+v;
+                double pointX = i;
+                context.strokeOval(pointX,pointY,2,2);
+                context.fillOval(pointX,pointY,2,2);
             }
-            d.setxParaboleValue(d.getxParaboleValue() + 1);
         }
     }
     //---------------------------------------------------------------------
