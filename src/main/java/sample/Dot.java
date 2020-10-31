@@ -2,30 +2,30 @@ package sample;
 
 public class Dot {
 
-    int x;
-    int y;
+    double x;
+    double y;
     double xParaboleValue;
     //-----------------------------------------------------------
-    public Dot(int x, int y) {
+    public Dot(double x, double y) {
         this.x = x;
         this.y = y;
     }
-    public Dot(int x, int y, double xParaboleValue){
+    public Dot(double x, double y, double xParaboleValue){
         this.x = x;
         this.y = y;
         this.xParaboleValue = xParaboleValue;
     }
     //-----------------------------------------------------------
-    public int getX() {
+    public double getX() {
         return x;
     }
-    public void setX(int x) {
+    public void setX(double x) {
         this.x = x;
     }
-    public int getY() {
+    public double getY() {
         return y;
     }
-    public void setY(int y) {
+    public void setY(double y) {
         this.y = y;
     }
     public double getxParaboleValue() {

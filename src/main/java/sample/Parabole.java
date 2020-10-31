@@ -2,58 +2,69 @@ package sample;
 
 public class Parabole {
 
-    double startXpoint;
-    double startYpoint;
-    double endXpoint;
-    double endYpoint;
-    double curveXpoint;
-    double curveYpoint;
+    double a;
+    double u;
+    double v;
+    double minusXPointValue;
+    double plusXPointValue;
+    double incrementedValue;
 
     //------------------------------------------------------------------------
-    public Parabole(double startXpoint, double startYpoint, double endXpoint, double endYpoint, double curveXpoint, double curveYpoint) {
-        this.startXpoint = startXpoint;
-        this.startYpoint = startYpoint;
-        this.endXpoint = endXpoint;
-        this.endYpoint = endYpoint;
-        this.curveXpoint = curveXpoint;
-        this.curveYpoint = curveYpoint;
+    public Parabole(double a, double u, double v, double minusXPointValue, double plusXPointValue, double incrementedValue) {
+        this.a = a;
+        this.u = u;
+        this.v = v;
+        this.minusXPointValue = minusXPointValue;
+        this.plusXPointValue = plusXPointValue;
+        this.incrementedValue = incrementedValue;
     }
     //------------------------------------------------------------------------
-    public double getStartXpoint() {
-        return startXpoint;
+    public double getA() {
+        return a;
     }
-    public void setStartXpoint(double startXpoint) {
-        this.startXpoint = startXpoint;
+    public void setA(double a) {
+        this.a = a;
     }
-    public double getStartYpoint() {
-        return startYpoint;
+    public double getU() {
+        return u;
     }
-    public void setStartYpoint(double startYpoint) {
-        this.startYpoint = startYpoint;
+    public void setU(double u) {
+        this.u = u;
     }
-    public double getEndXpoint() {
-        return endXpoint;
+    public double getV() {
+        return v;
     }
-    public void setEndXpoint(double endXpoint) {
-        this.endXpoint = endXpoint;
+    public void setV(double v) {
+        this.v = v;
     }
-    public double getEndYpoint() {
-        return endYpoint;
+    public double getMinusXPointValue() {
+        return minusXPointValue;
     }
-    public void setEndYpoint(double endYpoint) {
-        this.endYpoint = endYpoint;
+    public void setMinusXPointValue(double minusXPointValue) {
+        this.minusXPointValue = minusXPointValue;
     }
-    public double getCurveXpoint() {
-        return curveXpoint;
+    public double getPlusXPointValue() {
+        return plusXPointValue;
     }
-    public void setCurveXpoint(double curveXpoint) {
-        this.curveXpoint = curveXpoint;
+    public void setPlusXPointValue(double plusXPointValue) {
+        this.plusXPointValue = plusXPointValue;
     }
-    public double getCurveYpoint() {
-        return curveYpoint;
+    public double getIncrementedValue() {
+        return incrementedValue;
     }
-    public void setCurveYpoint(double curveYpoint) {
-        this.curveYpoint = curveYpoint;
+    public void setIncrementedValue(double incrementedValue) {
+        this.incrementedValue = incrementedValue;
     }
     //------------------------------------------------------------------------
+    public double getXValueFromParabola(double incrementedValue){
+        return incrementedValue;
+    }
+    public double getYValueFromParabola(double incrementedValue){
+        return this.a*((incrementedValue-this.u)*(incrementedValue-this.u))+this.v;
+    }
+    //------------------------------------------------------------------------
+
+
+
+
 }
