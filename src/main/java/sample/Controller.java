@@ -120,13 +120,21 @@ public class Controller {
     }
     //---------------------------------------------------------------------
     public void scannForParaboleCollision() {
+        for(Parabole p1 : paraboles){
+            for(Parabole p2 : paraboles){
+
+            }
+        }
     }
     //---------------------------------------------------------------------
     public void drawParaboleforEachDot() {
 
+        int parabolaID = 0;
         double a = 0;
         double u = 0;
         double v = 0;
+        double pointY = 0;
+        double pointX = 0;
         double minusXPoint = 0;
         double plusXPoint = 450;
         for (Dot d : activatedDots) {
@@ -135,18 +143,22 @@ public class Controller {
                 a = 1 / (2 * (d.getY() - this.yLine1));
                 u = d.getX();
                 v = 0.5 * (d.getY() + this.yLine1);
-                double pointY = a * ((i - u) * (i - u)) + v;
-                double pointX = i;
+                pointY = a * ((i - u) * (i - u)) + v;
+                pointX = i;
                 context.strokeOval(pointX, pointY, 1, 1);
                 context.fillOval(pointX, pointY, 1, 1);
 
-//                this.paraboles.get(activatedDots.size()).setA(a);
-//                this.paraboles.get(0).setU(u);
-//                this.paraboles.get(0).setV(v);
-//                this.paraboles.get(0).setMinusXPointValue(minusXPoint);
-//                this.paraboles.get(0).setPlusXPointValue(plusXPoint);
-//                this.paraboles.get(0).setIncrementedValue(i);
+                this.paraboles.get(parabolaID).setA(a);
+                this.paraboles.get(parabolaID).setU(u);
+                this.paraboles.get(parabolaID).setV(v);
+                this.paraboles.get(parabolaID).setMinusXPointValue(minusXPoint);
+                this.paraboles.get(parabolaID).setPlusXPointValue(plusXPoint);
+                this.paraboles.get(parabolaID).setIncrementedValue(i);
+                System.out.println("-------------------------------------------------------");
+                System.out.println("ID: "+parabolaID+" \nA: "+a+" \nU: "+u+" \nV: "+v+" \nMinusXPoint: "+minusXPoint+" \nPlusXPoint: "+plusXPoint+" \nIncrementedValue: "+i);
             }
+            parabolaID++;
+            //scannForParaboleCollision();
         }
     }
     //---------------------------------------------------------------------
