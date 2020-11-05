@@ -22,6 +22,8 @@ public class Controller {
     private Canvas canvas;
 
     private int anzahlParaboles = 8;
+    double minusXPoint = 0;
+    double plusXPoint = 450;
     private double xLine1, yLine1, xLine2, yLine2, xParabole;
     private Random rd = new Random();
     private GraphicsContext context;
@@ -73,13 +75,13 @@ public class Controller {
         activatedDots.add(new Dot(x, y, xParabole));
     }
 
-    public void addParabola(double a, double u, double v, double minusXPointValue, double plusXPointValue, double incrementedValue) {
-        paraboles.add(new Parabole(a, u, v, minusXPointValue, plusXPointValue, incrementedValue));
+    public void addParabola(double a, double u, double v, double minusXPointValue, double plusXPointValue, double incrementedValue, double bPointX, double bPointY) {
+        paraboles.add(new Parabole(a, u, v, minusXPointValue, plusXPointValue, incrementedValue,bPointX,bPointY));
     }
     //---------------------------------------------------------------------
     public void addEmptyParabolas(){
         for(int i = 0; i<8;i++){
-            this.addParabola(0,0,0,0,0,0);
+            this.addParabola(0,0,0,0,0,0,0,0);
         }
     }
     //---------------------------------------------------------------------
@@ -122,7 +124,24 @@ public class Controller {
     public void scannForParaboleCollision() {
         for(Parabole p1 : paraboles){
             for(Parabole p2 : paraboles){
+                double e = p1.getbPointX()*(p2.getbPointY()-this.yLine1)-p2.getbPointX()*(p1.getbPointY()-this.yLine1);
+                double a = Math.sqrt((p1.getbPointY()-this.yLine1)*(p2.getbPointY()-this.yLine1));
+                double d = Math.sqrt(((p1.getbPointX()-p2.getbPointX())*(p1.getbPointX()-p2.getbPointX())+(p1.getbPointY()-p2.getbPointY())*(p1.getbPointY()-p2.getbPointY())));
+                double b = p2.getbPointY()-p1.getbPointY();
+                double resultForX = (e+(a*d))/b;
 
+                double a1 = p1.getA();
+                double a2 = p2.getA();
+                double resultForY = a1*((resultForX-p1.getbPointX())*(resultForX-p1.getbPointX()))+0.5*(p1.getbPointY()+this.yLine1);
+
+                if(p1.getbPointX()>p2.getbPointX()){
+                    //context.strokeOval(resultForX,resultForY,5,5);
+                    p1.setMinusXPointValue(resultForX);
+                    p2.setPlusXPointValue(resultForX);
+                }else if(p2.getbPointX()>p1.getbPointX()){
+                    p2.setMinusXPointValue(resultForX);
+                    p1.setPlusXPointValue(resultForX);
+                }
             }
         }
     }
@@ -135,8 +154,6 @@ public class Controller {
         double v = 0;
         double pointY = 0;
         double pointX = 0;
-        double minusXPoint = 0;
-        double plusXPoint = 450;
         for (Dot d : activatedDots) {
             double i;
             for (i = minusXPoint; i < plusXPoint; i++) {
@@ -154,11 +171,15 @@ public class Controller {
                 this.paraboles.get(parabolaID).setMinusXPointValue(minusXPoint);
                 this.paraboles.get(parabolaID).setPlusXPointValue(plusXPoint);
                 this.paraboles.get(parabolaID).setIncrementedValue(i);
-                System.out.println("-------------------------------------------------------");
-                System.out.println("ID: "+parabolaID+" \nA: "+a+" \nU: "+u+" \nV: "+v+" \nMinusXPoint: "+minusXPoint+" \nPlusXPoint: "+plusXPoint+" \nIncrementedValue: "+i);
+                this.paraboles.get(parabolaID).setbPointX(d.getX());
+                this.paraboles.get(parabolaID).setbPointY(d.getY());
+
             }
             parabolaID++;
-            //scannForParaboleCollision();
+            if(parabolaID<=1){
+            }else{
+                scannForParaboleCollision();
+            }
         }
     }
     //---------------------------------------------------------------------
