@@ -35,8 +35,9 @@ public class Controller {
     //---------------------------------------------------------------------
     @FXML
     void startAction(ActionEvent event) {
-        this.strokeSweepLine();
         this.addEmptyParabolas();
+        this.strokeSweepLine();
+
     }
 
     //---------------------------------------------------------------------
@@ -47,7 +48,7 @@ public class Controller {
         xLine2 = 450;
         yLine2 = 0;
         createRandomDots();
-        AnimationTimer timer = new AnimationTimer() {
+        final AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long nanotime) {
 
@@ -65,6 +66,9 @@ public class Controller {
 
                 context.setStroke(Color.RED);
                 context.strokeLine(xLine1, yLine1, xLine2, yLine2);
+                if (yLine1 == 1200) {
+                    this.stop();
+                }
             }
         };
         timer.start();
@@ -75,22 +79,22 @@ public class Controller {
         dots.add(new Dot(x, y));
     }
 
-    public void addActivatedDot(double x, double y) {
-        activatedDots.add(new Dot(x, y));
+    public void addActivatedDot(double x, double y, double xMin, double xMax) {
+        activatedDots.add(new Dot(x, y, xMin, xMax));
     }
 
     public void addDotForLine(double x, double y) {
         voronoiDots.add(new Dot(x, y));
     }
 
-    public void addParabola(double a, double u, double v, double minusXPointValue, double plusXPointValue, double incrementedValue, double bPointX, double bPointY) {
-        paraboles.add(new Parabole(a, u, v, minusXPointValue, plusXPointValue, incrementedValue, bPointX, bPointY));
+    public void addParabola(double a, double u, double v, double incrementedValue, double bPointX, double bPointY) {
+        paraboles.add(new Parabole(a, u, v, incrementedValue, bPointX, bPointY));
     }
 
     //---------------------------------------------------------------------
     public void addEmptyParabolas() {
         for (int i = 0; i < 8; i++) {
-            this.addParabola(0, 0, 0, 0, 0, 0, 0, 0);
+            this.addParabola(0, 0, 0, 0, 0, 0);
         }
     }
 
@@ -137,35 +141,37 @@ public class Controller {
     public void scannForLineDotCollision(double x, double y) {
         if (this.yLine1 == y && this.yLine2 == y) {
             xParabole = 0;
-            this.addActivatedDot(x, y);
+            this.addActivatedDot(x, y, 0, 450);
         } else {
         }
     }
 
     //---------------------------------------------------------------------
-    public void scannForParaboleCollision() {
-        for (Parabole p1 : paraboles) {
-            for (Parabole p2 : paraboles) {
-                double e = p1.getbPointX() * (p2.getbPointY() - this.yLine1) - p2.getbPointX() * (p1.getbPointY() - this.yLine1);
-                double a = Math.sqrt((p1.getbPointY() - this.yLine1) * (p2.getbPointY() - this.yLine1));
-                double d = Math.sqrt(((p1.getbPointX() - p2.getbPointX()) * (p1.getbPointX() - p2.getbPointX()) + (p1.getbPointY() - p2.getbPointY()) * (p1.getbPointY() - p2.getbPointY())));
-                double b = p2.getbPointY() - p1.getbPointY();
-                double resultForX = (e + (a * d)) / b;
+    public void scannForParaboleCollision(Dot dot, double bPointX, double bPointY, double aParabola) {
+        for (Parabole p : paraboles) {
+            double e = bPointX * (p.getbPointY() - this.yLine1) - p.getbPointX() * (bPointY - this.yLine1);
+            double a = Math.sqrt((bPointY - this.yLine1) * (p.getbPointY() - this.yLine1));
+            double d = Math.sqrt(((bPointX - p.getbPointX()) * (bPointX - p.getbPointX()) + (bPointY - p.getbPointY()) * (bPointY - p.getbPointY())));
+            double b = p.getbPointY() - bPointY;
+            double resultForX = (e + (a * d)) / b;
 
-                double a1 = p1.getA();
-                double a2 = p2.getA();
-                double resultForY = a1 * ((resultForX - p1.getbPointX()) * (resultForX - p1.getbPointX())) + 0.5 * (p1.getbPointY() + this.yLine1);
+            double a1 = aParabola;
+            double a2 = p.getA();
+            double resultForY = a1 * ((resultForX - bPointX) * (resultForX - bPointX)) + 0.5 * (bPointY + this.yLine1);
 
-                context.strokeOval(resultForX,resultForY,5,5);
-                this.addDotForLine(resultForX, resultForY);
-
-                if(resultForX <=450 && resultForX >=0){
-                    if (p1.getbPointX() > p2.getbPointX()) {
-//                        p1.setMinusXPointValue(resultForX);
-//                        p2.setPlusXPointValue(resultForX);
-                    } else if (p2.getbPointX() > p1.getbPointX()) {
-//                        p2.setMinusXPointValue(resultForX);
-//                        p1.setPlusXPointValue(resultForX);
+            if (resultForX <= 450 && resultForX >= 0 && resultForY>=0 && resultForY<=600) {
+                if (p.getbPointY() == 0 && bPointY > 0) {
+                    this.addDotForLine(0, 0);
+                } else if (p.getbPointX() > bPointX) {
+//                    dot.setxMax(resultForX);
+                } else if (bPointX > p.getbPointX()) {
+//                    dot.setxMin(resultForX);
+                }
+                for (Dot dotVoronoi : voronoiDots) {
+                    if (dotVoronoi.getX() == resultForX || dotVoronoi.getY() == resultForY) {
+                    } else if (dotVoronoi.getX() != resultForX && dotVoronoi.getY() != resultForY) {
+                        this.addDotForLine(resultForX, resultForY);
+                        break;
                     }
                 }
             }
@@ -180,7 +186,7 @@ public class Controller {
         double pointY = 0;
         double pointX = 0;
         double i;
-        for (i = minusXPoint; i < plusXPoint; i++) {
+        for (i = d.getxMin(); i < d.getxMax(); i++) {
             a = 1 / (2 * (d.getY() - this.yLine1));
             u = d.getX();
             v = 0.5 * (d.getY() + this.yLine1);
@@ -192,27 +198,20 @@ public class Controller {
             this.paraboles.get(parabolaID).setA(a);
             this.paraboles.get(parabolaID).setU(u);
             this.paraboles.get(parabolaID).setV(v);
-            this.paraboles.get(parabolaID).setMinusXPointValue(minusXPoint);
-            this.paraboles.get(parabolaID).setPlusXPointValue(plusXPoint);
             this.paraboles.get(parabolaID).setIncrementedValue(i);
             this.paraboles.get(parabolaID).setbPointX(d.getX());
             this.paraboles.get(parabolaID).setbPointY(d.getY());
         }
+        scannForParaboleCollision(d, this.paraboles.get(parabolaID).getbPointX(), this.paraboles.get(parabolaID).getbPointY(), this.paraboles.get(parabolaID).getA());
     }
 
     //---------------------------------------------------------------------
     public void drawParaboleforEachDot() {
-
         int parabolaID = 0;
         for (Dot d : activatedDots) {
             calculateAndStoreParabola(d, parabolaID);
-            if (parabolaID < 1) {
-            } else {
-                scannForParaboleCollision();
-            }
             parabolaID++;
         }
-
     }
     //---------------------------------------------------------------------
 }
