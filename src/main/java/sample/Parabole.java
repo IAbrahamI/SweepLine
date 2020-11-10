@@ -7,17 +7,13 @@ public class Parabole {
     double v;
     double bPointX;
     double bPointY;
-    double minusXPointValue;
-    double plusXPointValue;
     double incrementedValue;
 
     //------------------------------------------------------------------------
-    public Parabole(double a, double u, double v, double minusXPointValue, double plusXPointValue, double incrementedValue, double bPointX, double bPointY) {
+    public Parabole(double a, double u, double v, double incrementedValue, double bPointX, double bPointY) {
         this.a = a;
         this.u = u;
         this.v = v;
-        this.minusXPointValue = minusXPointValue;
-        this.plusXPointValue = plusXPointValue;
         this.incrementedValue = incrementedValue;
         this.bPointX = bPointX;
         this.bPointY = bPointY;
@@ -40,18 +36,6 @@ public class Parabole {
     }
     public void setV(double v) {
         this.v = v;
-    }
-    public double getMinusXPointValue() {
-        return minusXPointValue;
-    }
-    public void setMinusXPointValue(double minusXPointValue) {
-        this.minusXPointValue = minusXPointValue;
-    }
-    public double getPlusXPointValue() {
-        return plusXPointValue;
-    }
-    public void setPlusXPointValue(double plusXPointValue) {
-        this.plusXPointValue = plusXPointValue;
     }
     public double getIncrementedValue() {
         return incrementedValue;
