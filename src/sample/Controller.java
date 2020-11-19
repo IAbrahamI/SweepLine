@@ -1,4 +1,4 @@
-package sample;
+package main;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;

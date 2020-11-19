@@ -1,4 +1,4 @@
-package sample;
+package controller;
 
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
@@ -7,11 +7,10 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
+import model.Arc;
+import model.Dot;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
 
 public class Controller {
 
@@ -24,7 +23,7 @@ public class Controller {
     private int anzahlParaboles = 8;
     double minusXPoint = 0;
     double plusXPoint = 450;
-    private double xLine1, yLine1, xLine2, yLine2, xParabole;
+    private double xLine1, yLine1, xLine2, yLine2;
     private GraphicsContext context;
     private ArrayList<Dot> dotsWithCollisions = new ArrayList<Dot>();
 
@@ -62,6 +61,7 @@ public class Controller {
                 }
 
                 calculation.startCalculation(yLine1);
+
                 drawArc(calculation);
                 strokeDotLines(calculation);
 
@@ -75,9 +75,6 @@ public class Controller {
         timer.start();
     }
     //---------------------------------------------------------------------
-
-
-    //---------------------------------------------------------------------
     public void strokeDots(Calculation calculation) {
         for (Dot d : calculation.getDots()) {
             context.setStroke(Color.GREEN);
@@ -90,7 +87,7 @@ public class Controller {
     //---------------------------------------------------------------------
     public void strokeDotLines(Calculation calculation) {
         Calculation c = new Calculation();
-        for (Dot d : calculation.getDots()) {
+        for (Dot d : calculation.getVoronoiDots()) {
             context.setStroke(Color.BLACK);
             context.setFill(Color.BLACK);
             context.strokeOval(d.getX(), d.getY(), 2, 2);
@@ -106,6 +103,7 @@ public class Controller {
             for(double i = a.getxMinValue();i<=a.getxMaxValue();i++){
                 double pointY = aArc * ((i-uArc)*(i-uArc))+vArc;
                 double pointX = i;
+                
                 context.strokeOval(pointX, pointY, 1, 1);
                 context.fillOval(pointX, pointY, 1, 1);
             }

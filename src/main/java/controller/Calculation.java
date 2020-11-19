@@ -1,4 +1,8 @@
-package sample;
+package controller;
+
+import model.Arc;
+import model.Dot;
+import model.Parabole;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -53,11 +57,9 @@ public class Calculation {
     public void addActivatedDot(double x, double y, double xMin, double xMax) {
         activatedDots.add(new Dot(x, y, xMin, xMax));
     }
-
     public void addDotForLine(double x, double y) {
         voronoiDots.add(new Dot(x, y));
     }
-
     public void addParabola(double a, double u, double v, double incrementedValue, double bPointX, double bPointY) {
         paraboles.add(new Parabole(a, u, v, incrementedValue, bPointX, bPointY));
     }
@@ -76,11 +78,18 @@ public class Calculation {
         }
     }
     //--------------------------------------------------------------------------------------
+    public void createRandomDots() {
+        for (int i = 1; i <= 8; i++) {
+            int randomXValue = rd.nextInt(430);
+            int randomYValue = rd.nextInt(530);
+            this.addDot(randomXValue, randomYValue);
+        }
+    }
+    //--------------------------------------------------------------------------------------
     public void startCalculation(double yLine1) {
         int parabolaID = 0;
         for (Dot d : activatedDots) {
             calculateAndStoreParabola(d, parabolaID, yLine1);
-
             parabolaID++;
         }
     }
@@ -122,14 +131,12 @@ public class Calculation {
                 if (p.getbPointY() == 0 && bPointY > 0) {
                     this.addDotForLine(resultForX, 0);
                 }else if(p.getbPointX() > bPointX){
-                    this.arcs.get(parabolaID).setxMinValue(resultForX);
+                    this.addArc(resultForX,dot.getxMax(),aParabola,uParabola,vParabola);
+//                    this.arcs.get(parabolaID).setxMinValue(resultForX);
                 } else if(p.getbPointX() < bPointX){
-                    this.arcs.get(parabolaID).setxMaxValue(resultForX);
+                    this.addArc(dot.getxMin(),resultForX,aParabola,uParabola,vParabola);
+//                    this.arcs.get(parabolaID).setxMaxValue(resultForX);
                 }
-                this.arcs.get(parabolaID).setaValue(aParabola);
-                this.arcs.get(parabolaID).setuValue(uParabola);
-                this.arcs.get(parabolaID).setvValue(vParabola);
-
             }
         }
     }
@@ -149,14 +156,6 @@ public class Calculation {
         if (yLine == y) {
             this.addActivatedDot(x, y, 0, 450);
         } else {
-        }
-    }
-    //--------------------------------------------------------------------------------------
-    public void createRandomDots() {
-        for (int i = 1; i <= 8; i++) {
-            int randomXValue = rd.nextInt(430);
-            int randomYValue = rd.nextInt(530);
-            this.addDot(randomXValue, randomYValue);
         }
     }
     //--------------------------------------------------------------------------------------
