@@ -7,10 +7,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
-import model.Arc;
-import model.Dot;
-
-import java.util.ArrayList;
 
 public class Controller {
 
@@ -20,94 +16,50 @@ public class Controller {
     @FXML
     private Canvas canvas;
 
-    private int anzahlParaboles = 8;
-    double minusXPoint = 0;
-    double plusXPoint = 450;
-    private double xLine1, yLine1, xLine2, yLine2;
-    private GraphicsContext context;
-    private ArrayList<Dot> dotsWithCollisions = new ArrayList<Dot>();
+    private GraphicsContext gc;
+    private int minX = 0;
+    private int maxX = 450;
+    private int minY = 0;
+    private int maxY = 550;
+    private int valueForLine = 0;
 
     //---------------------------------------------------------------------
     @FXML
     void startAction(ActionEvent event) {
         Calculation c = new Calculation();
-        c.addEmptyParabolas();
-        c.addEmptyArcs();
-        this.strokeSweepLine(c);
+        this.drawVoronoi(c);
 
     }
-
     //---------------------------------------------------------------------
-    public void strokeSweepLine(final Calculation calculation) {
-        context = canvas.getGraphicsContext2D();
-        xLine1 = minusXPoint;
-        yLine1 = 0;
-        xLine2 = plusXPoint;
-        yLine2 = 0;
-        calculation.createRandomDots();
+    public void drawVoronoi(Calculation c) {
+        gc = canvas.getGraphicsContext2D();
+
         final AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long nanotime) {
 
-                yLine1++;
-                yLine2++;
-                context.setFill(Color.WHITE);
-                context.fillRect(minusXPoint, 0, plusXPoint, 550);
+                valueForLine++;
+                refreshCanvas();
+                drawSweepLine();
 
-                strokeDots(calculation);
-
-                for (Dot d : calculation.getDots()) {
-                    calculation.scannForLineDotCollision(yLine1, d.getX(), d.getY());
-                }
-
-                calculation.startCalculation(yLine1);
-
-                drawArc(calculation);
-                strokeDotLines(calculation);
-
-                context.setStroke(Color.RED);
-                context.strokeLine(xLine1, yLine1, xLine2, yLine2);
-                if (yLine1 == 1200) {
-                    this.stop();
-                }
             }
         };
         timer.start();
     }
     //---------------------------------------------------------------------
-    public void strokeDots(Calculation calculation) {
-        for (Dot d : calculation.getDots()) {
-            context.setStroke(Color.GREEN);
-            context.setFill(Color.GREEN);
-            context.strokeOval(d.getX(), d.getY(), 6, 6);
-            context.fillOval(d.getX(), d.getY(), 6, 6);
-        }
+    public void refreshCanvas(){
+        gc.setFill(Color.WHITE);
+        gc.fillRect(minX,minY,maxX,maxY);
     }
+    //---------------------------------------------------------------------
+    public void drawSweepLine(){
+        gc.setStroke(Color.RED);
+        gc.strokeLine(minX,valueForLine,maxX,valueForLine);
+    }
+    //---------------------------------------------------------------------
+    public void createAndDrawDots(){
 
-    //---------------------------------------------------------------------
-    public void strokeDotLines(Calculation calculation) {
-        Calculation c = new Calculation();
-        for (Dot d : calculation.getVoronoiDots()) {
-            context.setStroke(Color.BLACK);
-            context.setFill(Color.BLACK);
-            context.strokeOval(d.getX(), d.getY(), 2, 2);
-            context.fillOval(d.getX(), d.getY(), 2, 2);
-        }
     }
     //---------------------------------------------------------------------
-    public void drawArc(Calculation calculation) {
-        for(Arc a : calculation.getArcs()){
-            double aArc = a.getaValue();
-            double uArc = a.getuValue();
-            double vArc = a.getvValue();
-            for(double i = a.getxMinValue();i<=a.getxMaxValue();i++){
-                double pointY = aArc * ((i-uArc)*(i-uArc))+vArc;
-                double pointX = i;
-                
-                context.strokeOval(pointX, pointY, 1, 1);
-                context.fillOval(pointX, pointY, 1, 1);
-            }
-        }
-    }
-    //---------------------------------------------------------------------
+
 }
