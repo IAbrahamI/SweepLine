@@ -4,13 +4,15 @@ import java.util.Random;
 
 public class Calculation {
 
-    private Random rd = new Random();
-    //--------------------------------------------------------------------------------------
-    public void createRandomDots(int amountOfDots, int maxX, int maxY){
-        for(int i = 0; i < amountOfDots; i++){
-            int rdValueForX = rd.nextInt(maxX-20);
-            int rdValueForY = rd.nextInt(maxY-20);
-        }
+    Random rd = new Random();
+    //---------------------------------------------------------------------
+    public int createRandomXDot(int maxX){
+        int rdValue = rd.nextInt(maxX-20);
+        return rdValue;
     }
-    //--------------------------------------------------------------------------------------
+    public int createRandomYDot(int maxY){
+        int rdValue = rd.nextInt(maxY-20);
+        return rdValue;
+    }
+    //---------------------------------------------------------------------
 }

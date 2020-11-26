@@ -7,6 +7,9 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
+import model.Dot;
+
+import java.util.ArrayList;
 
 public class Controller {
 
@@ -17,12 +20,13 @@ public class Controller {
     private Canvas canvas;
 
     private GraphicsContext gc;
+    private int amountOfDots = 10;
     private int minX = 0;
     private int maxX = 450;
     private int minY = 0;
-    private int maxY = 550;
+    private int maxY = 630;
     private int valueForLine = 0;
-
+    private ArrayList<Dot> dots = new ArrayList<Dot>();
     //---------------------------------------------------------------------
     @FXML
     void startAction(ActionEvent event) {
@@ -40,6 +44,7 @@ public class Controller {
 
                 valueForLine++;
                 refreshCanvas();
+                drawDots();
                 drawSweepLine();
 
             }
@@ -57,8 +62,26 @@ public class Controller {
         gc.strokeLine(minX,valueForLine,maxX,valueForLine);
     }
     //---------------------------------------------------------------------
-    public void createAndDrawDots(){
-
+    public void drawDots(){
+        for(Dot d : dots){
+            gc.setStroke(Color.BLUE);
+            gc.strokeOval(d.getX()+3,d.getY()+3,6,6);
+            gc.fillOval(d.getX()+3,d.getY()+3,6,6);
+        }
+    }
+    //---------------------------------------------------------------------
+    // Implementations
+    //---------------------------------------------------------------------
+    public void addDot(int x, int y){
+        dots.add(new Dot(x,y));
+    }
+    //---------------------------------------------------------------------
+    public void createDots(Calculation c){
+        for(int i = 0;i < amountOfDots;i++){
+            int xValue = c.createRandomXDot(maxX);
+            int yValue = c.createRandomYDot(maxY);
+            this.addDot(xValue,yValue);
+        }
     }
     //---------------------------------------------------------------------
 
