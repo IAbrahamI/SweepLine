@@ -6,12 +6,11 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import model.Dot;
 
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Controller {
 
@@ -22,7 +21,7 @@ public class Controller {
     private Canvas canvas;
 
     @FXML
-    private Slider slider;
+    private TextField points;
 
     private GraphicsContext gc;
     private int amountOfDots = 10;
@@ -40,10 +39,9 @@ public class Controller {
 
     }
     //---------------------------------------------------------------------
-    public void drawVoronoi(final Calculation c) {
+    public void drawVoronoi(Calculation c) {
         gc = canvas.getGraphicsContext2D();
         createDots(c);
-
         final AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long nanotime) {
@@ -83,11 +81,11 @@ public class Controller {
     }
     //---------------------------------------------------------------------
     public void createDots(Calculation c){
-        for(int i = 0;i < Math.round(slider.getValue());i++){
+        int amountOfDots = Integer.parseInt(points.getText());
+        for(int i = 0;i < amountOfDots;i++){
             int xValue = c.createRandomXDot(maxX);
             int yValue = c.createRandomYDot(maxY);
             this.addDot(xValue,yValue);
-            System.out.println(Math.round(slider.getValue()));
         }
     }
     //---------------------------------------------------------------------
