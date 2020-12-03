@@ -28,7 +28,7 @@ public class Controller {
     private int minX = 0;
     private int maxX = 450;
     private int minY = 0;
-    private int maxY = 630;
+    private int maxY = 500;
     private int valueForLine = 0;
     private ArrayList<Dot> dots = new ArrayList<Dot>();
     //---------------------------------------------------------------------
