@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 import model.Dot;
 
@@ -19,12 +20,14 @@ public class Controller {
     @FXML
     private Canvas canvas;
 
+    @FXML
+    private TextField points;
+
     private GraphicsContext gc;
-    private int amountOfDots = 10;
     private int minX = 0;
     private int maxX = 450;
     private int minY = 0;
-    private int maxY = 630;
+    private int maxY = 500;
     private int valueForLine = 0;
     private ArrayList<Dot> dots = new ArrayList<Dot>();
     //---------------------------------------------------------------------
@@ -37,7 +40,7 @@ public class Controller {
     //---------------------------------------------------------------------
     public void drawVoronoi(Calculation c) {
         gc = canvas.getGraphicsContext2D();
-
+        createDots(c);
         final AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long nanotime) {
@@ -77,6 +80,7 @@ public class Controller {
     }
     //---------------------------------------------------------------------
     public void createDots(Calculation c){
+        int amountOfDots = Integer.parseInt(points.getText());
         for(int i = 0;i < amountOfDots;i++){
             int xValue = c.createRandomXDot(maxX);
             int yValue = c.createRandomYDot(maxY);
