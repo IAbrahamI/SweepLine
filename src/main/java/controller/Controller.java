@@ -31,6 +31,7 @@ public class Controller {
     private int maxY = 500;
     private int valueForLine = 0;
     private ArrayList<Dot> dots = new ArrayList<Dot>();
+
     //---------------------------------------------------------------------
     @FXML
     void startAction(ActionEvent event) {
@@ -38,6 +39,7 @@ public class Controller {
         this.drawVoronoi(c);
 
     }
+
     //---------------------------------------------------------------------
     public void drawVoronoi(Calculation c) {
         gc = canvas.getGraphicsContext2D();
@@ -55,37 +57,48 @@ public class Controller {
         };
         timer.start();
     }
+
     //---------------------------------------------------------------------
-    public void refreshCanvas(){
+    public void refreshCanvas() {
         gc.setFill(Color.WHITE);
-        gc.fillRect(minX,minY,maxX,maxY);
+        gc.fillRect(minX, minY, maxX, maxY);
     }
+
     //---------------------------------------------------------------------
-    public void drawSweepLine(){
+    public void drawSweepLine() {
         gc.setStroke(Color.RED);
-        gc.strokeLine(minX,valueForLine,maxX,valueForLine);
+        gc.strokeLine(minX, valueForLine, maxX, valueForLine);
     }
+
     //---------------------------------------------------------------------
-    public void drawDots(){
-        for(Dot d : dots){
+    public void drawDots() {
+        for (Dot d : dots) {
             gc.setStroke(Color.BLUE);
-            gc.strokeOval(d.getX()+3,d.getY()+3,6,6);
-            gc.fillOval(d.getX()+3,d.getY()+3,6,6);
+            gc.strokeOval(d.getX() + 3, d.getY() + 3, 6, 6);
+            gc.fillOval(d.getX() + 3, d.getY() + 3, 6, 6);
         }
     }
+
     //---------------------------------------------------------------------
     // Implementations
     //---------------------------------------------------------------------
-    public void addDot(int x, int y){
-        dots.add(new Dot(x,y));
+    public void addDot(int x, int y) {
+        dots.add(new Dot(x, y));
     }
+
     //---------------------------------------------------------------------
-    public void createDots(Calculation c){
-        int amountOfDots = Integer.parseInt(points.getText());
-        for(int i = 0;i < amountOfDots;i++){
-            int xValue = c.createRandomXDot(maxX);
-            int yValue = c.createRandomYDot(maxY);
-            this.addDot(xValue,yValue);
+    public void createDots(Calculation c) {
+        if (!points.getText().matches("[0-9]*")) {
+            //muss noch auf Canvas ausgeben und nicht in Konsole
+            System.out.println("bitte gebe eine Zahl ein und keinen Text");
+        } else {
+            int amountOfDots = Integer.parseInt(points.getText());
+            for (int i = 0; i < amountOfDots; i++) {
+                int xValue = c.createRandomXDot(maxX);
+                int yValue = c.createRandomYDot(maxY);
+                this.addDot(xValue, yValue);
+            }
+
         }
     }
     //---------------------------------------------------------------------
