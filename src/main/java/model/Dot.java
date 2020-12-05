@@ -1,6 +1,6 @@
 package model;
 
-public class Dot {
+public class Dot implements Comparable<Dot>{
 
     double x;
     double y;
@@ -43,6 +43,10 @@ public class Dot {
     }
     public void setxMax(double xMax) {
         this.xMax = xMax;
+    }
+
+    public int compareTo(Dot dot) {
+        return (int) (this.x-dot.getX());
     }
     //-----------------------------------------------------------
 }

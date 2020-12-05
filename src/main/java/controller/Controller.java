@@ -11,8 +11,9 @@ import javafx.scene.paint.Color;
 import model.Dot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
-public class Controller {
+public class Controller{
 
     @FXML
     private Button button;
@@ -85,12 +86,15 @@ public class Controller {
     public void addDot(int x, int y) {
         dots.add(new Dot(x, y));
     }
-
+    public void sortDots(){
+        Collections.sort(dots);
+        for (Dot d: dots){
+            System.out.println("X-Value: "+d.getX());
+        }
+    }
     //---------------------------------------------------------------------
     public void createDots(Calculation c) {
         if (!points.getText().matches("[0-9]*")) {
-            //muss noch auf Canvas ausgeben und nicht in Konsole
-            System.out.println("bitte gebe eine Zahl ein und keinen Text");
         } else {
             int amountOfDots = Integer.parseInt(points.getText());
             for (int i = 0; i < amountOfDots; i++) {
@@ -98,9 +102,12 @@ public class Controller {
                 int yValue = c.createRandomYDot(maxY);
                 this.addDot(xValue, yValue);
             }
-
         }
+        sortDots();
     }
     //---------------------------------------------------------------------
+    // Store functions
+    //---------------------------------------------------------------------
 
+    //---------------------------------------------------------------------
 }
