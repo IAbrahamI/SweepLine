@@ -20,7 +20,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="SweepLine" target="5" />
+      <module name="SweepLine" target="8" />
     </bytecodeTargetLevel>
   </component>
 </project>

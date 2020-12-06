@@ -10,10 +10,8 @@ public class Dot implements Comparable<Dot>{
     public Dot(double x, double y) {
         this.x = x;
         this.y = y;
-        this.xMin = xMin;
-        this.xMax = xMax;
     }
-    public Dot(double x, double y, double xMin,double xMax) {
+    public Dot(double x, double y, double xMin, double xMax) {
         this.x = x;
         this.y = y;
         this.xMin = xMin;
@@ -44,7 +42,7 @@ public class Dot implements Comparable<Dot>{
     public void setxMax(double xMax) {
         this.xMax = xMax;
     }
-
+    //-----------------------------------------------------------
     public int compareTo(Dot dot) {
         return (int) (this.x-dot.getX());
     }
