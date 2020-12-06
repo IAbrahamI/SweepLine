@@ -35,6 +35,7 @@ public class Controller{
     private int maxY = 500;
     private int valueForLine = 0;
     private ArrayList<Dot> dots = new ArrayList<Dot>();
+    private ArrayList<Dot> voronoiDots = new ArrayList<Dot>();
     private ArrayList<Arc> arcs = new ArrayList<Arc>();
     private ArrayList<Parabola> parabolas = new ArrayList<Parabola>();
     //---------------------------------------------------------------------
@@ -56,6 +57,7 @@ public class Controller{
                 drawDots();
                 drawSweepLine();
                 scannForSweepLineDotCollision();
+
                 //drawArcs();
             }
         };
@@ -102,10 +104,23 @@ public class Controller{
     public void addArc(double xMin, double xMax, double a, double u, double v){
         arcs.add(new Arc(xMin,xMax,a,u,v));
     }
+    public void addVoronoiDot(double x, double y){
+        voronoiDots.add(new Dot(x,y));
+    }
     //---------------------------------------------------------------------
     public void sortDots(){
         Comparator<Dot> dotComparator = Comparator.comparing(Dot::getY).thenComparing(Dot::getX);
         Collections.sort(dots,dotComparator);
+    }
+    //---------------------------------------------------------------------
+    public double getMaxYValue(){
+        double maxValue = 0;
+        for(int i=0;i< voronoiDots.size();i++){
+            if(voronoiDots.get(i).getY()>maxValue){
+                maxValue = voronoiDots.get(i).getY();
+            }
+        }
+        return maxValue;
     }
     //---------------------------------------------------------------------
     public void createDots(Calculation c) {
@@ -126,20 +141,23 @@ public class Controller{
         this.parabolas.get(parabolas.size()-1).setU(u);
         this.parabolas.get(parabolas.size()-1).setV(v);
     }
-    public void storeArc(double xMin, double xMax, double a, double u, double v){
-        this.arcs.get(arcs.size()-1).setxMinValue(xMin);
-        this.arcs.get(arcs.size()-1).setxMaxValue(xMax);
+    public void storeArc(double a, double u, double v){
         this.arcs.get(arcs.size()-1).setaValue(a);
         this.arcs.get(arcs.size()-1).setuValue(u);
         this.arcs.get(arcs.size()-1).setvValue(v);
+    }
+    public void storeDot(double x, double y){
+        this.voronoiDots.get(voronoiDots.size()-1).setX(x);
+        this.voronoiDots.get(voronoiDots.size()-1).setY(y);
     }
     //---------------------------------------------------------------------
     // Implementations
     //---------------------------------------------------------------------
     public void scannForSweepLineDotCollision(){
         for (Dot d: dots){
+            addParabola(0,0,0);
             if(d.getY()==valueForLine){
-                addParabola(0,0,0);
+                addVoronoiDot(0,0);
                 addArc(d.getxMin(),d.getxMax(),0,0,0);
             }
             calculateParabola(d);
@@ -174,12 +192,27 @@ public class Controller{
 
             double x = (e+(a*d))/b;
             double y = parabolas.get(parabolas.size()-1).getA()*((x-dot1.getX())*(x-dot1.getX()))+0.5*(dot1.getY()+valueForLine);
-            if(y<=valueForLine && y>=minY && y<=maxY && x>=minX && x<=maxX){
-
-                gc.setStroke(Color.GREEN);
-                gc.strokeOval(x,y,6,6);
+            if(y<=valueForLine && y>=minY && y<=maxY && x>=minX && x<=maxX && voronoiDots.size()>1) {
+                storeDot(x, y);
+                calculateArc(dot1, x, y);
             }
         }
+        System.out.println(voronoiDots.size());
+    }
+    //---------------------------------------------------------------------
+    public void calculateArc(Dot dot, double x, double y){
+
+            double yMax = getMaxYValue();
+            gc.setStroke(Color.GREEN);
+            gc.strokeOval(x,y,6,6);
+
+//            if(voronoiDots.get(voronoiDots.size()-1).getY()<=y && voronoiDots.get(voronoiDots.size()-1).getX()>dot.getX()){
+//                this.arcs.get(arcs.size()-1).setxMaxValue(x);
+//                storeArc(parabolas.get(parabolas.size()-1).getA(),parabolas.get(parabolas.size()-1).getU(),parabolas.get(parabolas.size()-1).getV());
+//            } else if(voronoiDots.get(voronoiDots.size()-1).getY()<=y && voronoiDots.get(parabolas.size()-1).getX()<=dot.getX()){
+//                this.arcs.get(arcs.size()-1).setxMinValue(x);
+//                storeArc(parabolas.get(parabolas.size()-1).getA(),parabolas.get(parabolas.size()-1).getU(),parabolas.get(parabolas.size()-1).getV());
+//            }
     }
     //---------------------------------------------------------------------
 }

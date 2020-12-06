@@ -1,5 +1,7 @@
 package controller;
 
+import model.Dot;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Calculation {
@@ -14,5 +16,7 @@ public class Calculation {
         int rdValue = rd.nextInt(maxY-20);
         return rdValue;
     }
+    //---------------------------------------------------------------------
+
     //---------------------------------------------------------------------
 }
