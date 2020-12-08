@@ -203,24 +203,24 @@ public class Controller{
                 calculateDots(dot1, x, y);
                 // Prove if there are two X Values and add them to the list
             }
-        }
-        if (x > dot1.getX()) {
-            xFinal = x;
-        } else if(x == dot1.getX()) {
-            xFinal = x;
-        } else if(x < dot1.getX()) {
-            xFinal = dot1.getX();
-        }
+            if (x > dot1.getX()) {
+                xFinal = x;
+            } else if(x == dot1.getX()) {
+                xFinal = x;
+            } else if(x < dot1.getX()) {
+                xFinal = dot1.getX();
+            }
 
-        if (y > dot1.getY()) {
-            yFinal = y;
-        } else if(y == dot1.getY()) {
-            yFinal = y;
-        } else if(y < dot1.getY()) {
-            yFinal = dot1.getY();
-        }
+            if (y > dot1.getY()) {
+                yFinal = y;
+            } else if(y == dot1.getY()) {
+                yFinal = y;
+            } else if(y < dot1.getY()) {
+                yFinal = dot1.getY();
+            }
 
-        list.add(new Dot(xFinal, yFinal));
+            list.add(new Dot(xFinal, yFinal));
+        }
         //Prove wich Y Value ist max and store it
 
         list.clear();
