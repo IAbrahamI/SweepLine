@@ -33,6 +33,10 @@ public class Controller{
     private int minY = 0;
     private int maxY = 500;
     private int valueForLine = 0;
+    private double xFinal = 0;
+    private double yFinal = 0;
+    private double x = 0;
+    private double y = 0;
     private ArrayList<Dot> dots = new ArrayList<Dot>();
     private ArrayList<Arc> arcs = new ArrayList<Arc>();
     private ArrayList<Dot> voronoiDots = new ArrayList<Dot>();
@@ -193,15 +197,30 @@ public class Controller{
                 double d = Math.sqrt((dot1.getX()-dot2.getX())*(dot1.getX()-dot2.getX()) + (dot1.getY()-dot2.getY())*(dot1.getY()-dot2.getY()));
                 double b = dot2.getY()-dot1.getY();
 
-                double x = (e+(a*d))/b;
-                double y = parabolas.get(parabolas.size()-1).getA()*((x-dot1.getX())*(x-dot1.getX()))+0.5*(dot1.getY()+valueForLine);
+                x = (e+(a*d))/b;
+                y = parabolas.get(parabolas.size()-1).getA()*((x-dot1.getX())*(x-dot1.getX()))+0.5*(dot1.getY()+valueForLine);
 
                 calculateDots(dot1, x, y);
                 // Prove if there are two X Values and add them to the list
-
-                list.add(new Dot(x,y));
             }
         }
+        if (x > dot1.getX()) {
+            xFinal = x;
+        } else if(x == dot1.getX()) {
+            xFinal = x;
+        } else if(x < dot1.getX()) {
+            xFinal = dot1.getX();
+        }
+
+        if (y > dot1.getY()) {
+            yFinal = y;
+        } else if(y == dot1.getY()) {
+            yFinal = y;
+        } else if(y < dot1.getY()) {
+            yFinal = dot1.getY();
+        }
+
+        list.add(new Dot(xFinal, yFinal));
         //Prove wich Y Value ist max and store it
 
         list.clear();
