@@ -54,6 +54,7 @@ public class Controller{
             alert.setContentText("Bitte gib eine Zahl zwischen 2 - 20 ein");
 
             alert.showAndWait();
+            points.clear();
         } else {
             Calculation c = new Calculation();
             this.drawVoronoi(c);
