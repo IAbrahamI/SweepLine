@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
@@ -46,9 +47,19 @@ public class Controller{
     //---------------------------------------------------------------------
     @FXML
     void startAction(ActionEvent event) {
-        Calculation c = new Calculation();
-        this.drawVoronoi(c);
+        if (!points.getText().matches("([2-9]|1[0-9]|20)")) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Fehler");
+            alert.setHeaderText("Fehler bei der Eingabe");
+            alert.setContentText("Bitte gib eine Zahl zwischen 2 - 20 ein");
+
+            alert.showAndWait();
+        } else {
+            Calculation c = new Calculation();
+            this.drawVoronoi(c);
+        }
     }
+    //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     public void drawVoronoi(Calculation c) {
         gc = canvas.getGraphicsContext2D();
@@ -135,15 +146,12 @@ public class Controller{
     }
     //---------------------------------------------------------------------
     public void createDots(Calculation c) {
-        if (!points.getText().matches("[0-9]*")) {
-        } else {
             int amountOfDots = Integer.parseInt(points.getText());
             for (int i = 0; i < amountOfDots; i++) {
                 int xValue = c.createRandomXDot(maxX);
                 int yValue = c.createRandomYDot(maxY);
                 this.addDot(xValue, yValue,minX,maxX);
             }
-        }
         sortDots();
     }
     //---------------------------------------------------------------------
