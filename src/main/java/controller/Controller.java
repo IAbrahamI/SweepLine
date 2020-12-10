@@ -32,7 +32,9 @@ public class Controller{
     private int maxX = 450;
     private int minY = 0;
     private int maxY = 500;
+    // y-value for sweepline
     private int valueForLine = 0;
+
     private double xFinal = 0;
     private double yFinal = 0;
     private double x = 0;
@@ -61,7 +63,7 @@ public class Controller{
                 drawSweepLine();
                 scannForSweepLineDotCollision();
                 drawLines();
-                //drawArcs();
+                drawArcs();
             }
         };
         timer.start();
@@ -201,26 +203,27 @@ public class Controller{
                 y = parabolas.get(parabolas.size()-1).getA()*((x-dot1.getX())*(x-dot1.getX()))+0.5*(dot1.getY()+valueForLine);
 
                 calculateDots(dot1, x, y);
+
                 // Prove if there are two X Values and add them to the list
             }
-            if (x > dot1.getX()) {
-                xFinal = x;
-            } else if(x == dot1.getX()) {
-                xFinal = x;
-            } else if(x < dot1.getX()) {
-                xFinal = dot1.getX();
-            }
-
-            if (y > dot1.getY()) {
-                yFinal = y;
-            } else if(y == dot1.getY()) {
-                yFinal = y;
-            } else if(y < dot1.getY()) {
-                yFinal = dot1.getY();
-            }
-
-            list.add(new Dot(xFinal, yFinal));
         }
+        if (x > dot1.getX()) {
+            xFinal = x;
+        } else if(x == dot1.getX()) {
+            xFinal = x;
+        } else if(x < dot1.getX()) {
+            xFinal = dot1.getX();
+        }
+
+        if (y > dot1.getY()) {
+            yFinal = y;
+        } else if(y == dot1.getY()) {
+            yFinal = y;
+        } else if(y < dot1.getY()) {
+            yFinal = dot1.getY();
+        }
+        list.add(new Dot(xFinal, yFinal));
+        calculateDots(dot1, xFinal, yFinal);
         //Prove wich Y Value ist max and store it
 
         list.clear();
