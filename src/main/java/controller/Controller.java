@@ -35,11 +35,7 @@ public class Controller{
     private int maxY = 500;
     // y-value for sweepline
     private int valueForLine = 0;
-
-    private double xFinal = 0;
-    private double yFinal = 0;
-    private double x = 0;
-    private double y = 0;
+    private boolean isStopped = false;
     private ArrayList<Dot> dots = new ArrayList<Dot>();
     private ArrayList<Arc> arcs = new ArrayList<Arc>();
     private ArrayList<Dot> voronoiDots = new ArrayList<Dot>();
@@ -52,7 +48,6 @@ public class Controller{
             alert.setTitle("Fehler");
             alert.setHeaderText("Fehler bei der Eingabe");
             alert.setContentText("Bitte gib eine Zahl zwischen 2 - 20 ein");
-
             alert.showAndWait();
             points.clear();
         } else {
@@ -61,6 +56,18 @@ public class Controller{
         }
     }
     //---------------------------------------------------------------------
+    @FXML
+    void endAction(ActionEvent event) {
+        gc = canvas.getGraphicsContext2D();
+        gc.fillRect(0,0,maxX,maxY);
+        this.voronoiDots.clear();
+        this.parabolas.clear();
+        this.arcs.clear();
+        this.dots.clear();
+        this.valueForLine=0;
+        this.isStopped=true;
+
+    }
     //---------------------------------------------------------------------
     public void drawVoronoi(Calculation c) {
         gc = canvas.getGraphicsContext2D();
@@ -75,10 +82,12 @@ public class Controller{
                 drawSweepLine();
                 scannForSweepLineDotCollision();
                 drawLines();
-                drawArcs();
             }
         };
         timer.start();
+        if(this.isStopped==true){
+            timer.stop();
+        }
     }
     //---------------------------------------------------------------------
     public void refreshCanvas() {
@@ -98,16 +107,15 @@ public class Controller{
         }
     }
     //---------------------------------------------------------------------
-    public void drawArcs(){
-        for(Arc a: arcs){
-            for (double i=a.getxMinValue();i<=a.getxMaxValue();i++){
-                double y = a.getaValue()*((i-a.getuValue())*(i-a.getuValue()))+a.getvValue();
-                double x = i;
-                gc.setStroke(Color.GREEN);
-                gc.strokeOval(x,y,1,1);
-            }
-        }
-    }
+//    public void drawArcs(){
+//        for(Arc a: arcs){
+//            for (double i=a.getxMinValue();i<=a.getxMaxValue();i++){
+//                double y = a.getaValue()*((i-a.getuValue())*(i-a.getuValue()))+a.getvValue();
+//                double x = i;
+//                gc.strokeOval(x,y,1,1);
+//            }
+//        }
+//    }
     //---------------------------------------------------------------------
     public void drawLines(){
         for(Dot d: voronoiDots){
@@ -161,26 +169,20 @@ public class Controller{
         this.parabolas.get(parabolas.size()-1).setU(u);
         this.parabolas.get(parabolas.size()-1).setV(v);
     }
-    public void storeArc(double a, double u, double v){
-        this.arcs.get(arcs.size()-1).setaValue(a);
-        this.arcs.get(arcs.size()-1).setuValue(u);
-        this.arcs.get(arcs.size()-1).setvValue(v);
-    }
     //---------------------------------------------------------------------
     // Implementations
     //---------------------------------------------------------------------
     public void scannForSweepLineDotCollision(){
         for (Dot d: dots){
             addParabola(0,0,0);
+            calculateParabola(d);
+            if(parabolas.size()>1){
+            compareMultipleParabolas(d);
+            }
             if(d.getY()==valueForLine){
                 addArc(d.getxMin(),d.getxMax(),0,0,0);
             }
-            calculateParabola(d);
-            if(parabolas.size()>1){
-                compareMultipleParabolas(d);
-            }
         }
-        System.out.println(voronoiDots.size());
     }
     //---------------------------------------------------------------------
     public void calculateParabola(Dot dot){
@@ -200,49 +202,58 @@ public class Controller{
     }
     //---------------------------------------------------------------------
     public void compareMultipleParabolas(Dot dot1){
-        ArrayList<Dot> list = new ArrayList<Dot>();
+        ArrayList<Dot> listXGreaterThanDotX = new ArrayList<Dot>();
+        ArrayList<Dot> listXSmallerThanDotX = new ArrayList<Dot>();
         for (Dot dot2: dots){
-            if(dot2.getY()<valueForLine){
+            if((dot2.getY()-valueForLine)<valueForLine){
                 double e = dot1.getX()*(dot2.getY()-valueForLine) - dot2.getX()*(dot1.getY()-valueForLine);
                 double a = Math.sqrt((dot1.getY()-valueForLine)*(dot2.getY()-valueForLine));
                 double d = Math.sqrt((dot1.getX()-dot2.getX())*(dot1.getX()-dot2.getX()) + (dot1.getY()-dot2.getY())*(dot1.getY()-dot2.getY()));
                 double b = dot2.getY()-dot1.getY();
 
-                x = (e+(a*d))/b;
-                y = parabolas.get(parabolas.size()-1).getA()*((x-dot1.getX())*(x-dot1.getX()))+0.5*(dot1.getY()+valueForLine);
+                double x = (e+(a*d))/b;
+                double y = parabolas.get(parabolas.size()-1).getA()*((x-dot1.getX())*(x-dot1.getX()))+0.5*(dot1.getY()+valueForLine);
 
-                calculateDots(dot1, x, y);
-
-                // Prove if there are two X Values and add them to the list
+                calculateDotsForBeachLine(dot1, x, y, listXGreaterThanDotX, listXSmallerThanDotX);
             }
         }
-        if (x > dot1.getX()) {
-            xFinal = x;
-        } else if(x == dot1.getX()) {
-            xFinal = x;
-        } else if(x < dot1.getX()) {
-            xFinal = dot1.getX();
+        if(listXGreaterThanDotX.size()>1){
+            double yHighestValue = 0;
+            double x = 0;
+            for (Dot d:listXGreaterThanDotX){
+                if(d.getY()>yHighestValue){
+                    yHighestValue = d.getY();
+                    x = d.getX();
+                }
+            }
+            addVoronoiDot(x,yHighestValue);
+        }
+        if(listXSmallerThanDotX.size()>1){
+            double yHighestValue = 0;
+            double x = 0;
+            for(Dot d: listXSmallerThanDotX){
+                if(d.getY()>yHighestValue){
+                    yHighestValue = d.getY();
+                    x = d.getX();
+                }
+            }
+            addVoronoiDot(x,yHighestValue);
         }
 
-        if (y > dot1.getY()) {
-            yFinal = y;
-        } else if(y == dot1.getY()) {
-            yFinal = y;
-        } else if(y < dot1.getY()) {
-            yFinal = dot1.getY();
-        }
-        list.add(new Dot(xFinal, yFinal));
-        calculateDots(dot1, xFinal, yFinal);
-        //Prove wich Y Value ist max and store it
-
-        list.clear();
+        listXGreaterThanDotX.clear();
+        listXSmallerThanDotX.clear();
+        //Prove which Y Value ist max and store it
     }
     //---------------------------------------------------------------------
-    public void calculateDots(Dot dot, double x, double y){
+    public void calculateDotsForBeachLine(Dot dot, double x, double y, ArrayList<Dot> listXGreaterThanDotX, ArrayList<Dot> listXSmallerThanDotX){
         if(valueForLine>y && y>minY && y<=maxY && x>minX && x<=maxX){
-            addVoronoiDot(x,y);
-            gc.setStroke(Color.GREEN);
-            gc.strokeOval(x,y,6,6);
+            // addVoronoiDot(x,y);
+            //gc.strokeOval(x,y,6,6);
+            if(dot.getX()>=x){
+                listXGreaterThanDotX.add(new Dot(x,y));
+            } else if (dot.getX() < x) {
+                listXSmallerThanDotX.add(new Dot(x,y));
+            }
         }
     }
     //---------------------------------------------------------------------
