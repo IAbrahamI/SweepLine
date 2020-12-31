@@ -132,9 +132,6 @@ public class Controller{
     public void addParabola(double a, double u, double v){
         parabolas.add(new Parabola(a,u,v));
     }
-    public void addArc(double xMin, double xMax, double a, double u, double v){
-        arcs.add(new Arc(xMin,xMax,a,u,v));
-    }
     public void addVoronoiDot(double x, double y){
         voronoiDots.add(new Dot(x,y));
     }
@@ -173,7 +170,9 @@ public class Controller{
     // Implementations
     //---------------------------------------------------------------------
     public void scannForSweepLineDotCollision(){
+        int currentAmountOfParabolas =0;
         for (Dot d: dots){
+            currentAmountOfParabolas++;
             addParabola(0,0,0);
             calculateParabola(d);
             if(parabolas.size()>0){
@@ -202,7 +201,7 @@ public class Controller{
         ArrayList<Dot> listXGreaterThanDotX = new ArrayList<Dot>();
         ArrayList<Dot> listXSmallerThanDotX = new ArrayList<Dot>();
         for (Dot dot2: dots){
-            if((dot1.getY()-valueForLine)>(dot2.getY()-valueForLine) && (dot2.getY()-valueForLine)<valueForLine){
+            if((dot2.getY()-valueForLine)<valueForLine){
                 double e = dot1.getX()*(dot2.getY()-valueForLine) - dot2.getX()*(dot1.getY()-valueForLine);
                 double a = Math.sqrt((dot1.getY()-valueForLine)*(dot2.getY()-valueForLine));
                 double d = Math.sqrt((dot1.getX()-dot2.getX())*(dot1.getX()-dot2.getX()) + (dot1.getY()-dot2.getY())*(dot1.getY()-dot2.getY()));
@@ -210,50 +209,46 @@ public class Controller{
 
                 double x = (e+(a*d))/b;
                 double y = parabolas.get(parabolas.size()-1).getA()*((x-dot1.getX())*(x-dot1.getX()))+0.5*(dot1.getY()+valueForLine);
-
-                if((dot1.getY()-valueForLine)>(dot2.getY()-valueForLine)){
-                    calculateDotsForBeachLine(dot1, x, y, listXGreaterThanDotX, listXSmallerThanDotX);
-                }
+                calculateDotsForBeachLine(dot1, x, y, listXGreaterThanDotX, listXSmallerThanDotX);
             }
         }
-
-            if(listXGreaterThanDotX.size()>0){
-                System.out.println("Bigger Than Dot");
-                double yHighestValue = 0;
-                double x = 0;
-                for (Dot d:listXGreaterThanDotX){
-                    if(d.getY()>yHighestValue){
-                        yHighestValue = d.getY();
-                        x = d.getX();
-                    }
+        if(listXGreaterThanDotX.size()>0){
+            double yHighestValue = 0;
+            double x = 0;
+            for (Dot d:listXGreaterThanDotX){
+                if(d.getY()>yHighestValue){
+                    yHighestValue = d.getY();
+                    x = d.getX();
                 }
-                gc.strokeOval(x,yHighestValue,6,6);
-                addVoronoiDot(x,yHighestValue);
             }
-
-            if(listXSmallerThanDotX.size()>0) {
-                System.out.println("Smaller Than Dot");
-                double yHighestValue = 0;
-                double x = 0;
-                for (Dot d : listXSmallerThanDotX) {
-                    if (d.getY() > yHighestValue) {
-                        yHighestValue = d.getY();
-                        x = d.getX();
-                    }
+            gc.strokeOval(x,yHighestValue,6,6);
+            addVoronoiDot(x,yHighestValue);
+        }
+        if(listXSmallerThanDotX.size()>0) {
+            double yHighestValue = 0;
+            double x = 0;
+            for (Dot d : listXSmallerThanDotX) {
+                if (d.getY() > yHighestValue) {
+                    yHighestValue = d.getY();
+                    x = d.getX();
                 }
-                gc.strokeOval(x,yHighestValue,6,6);
-                addVoronoiDot(x,yHighestValue);
             }
+            gc.strokeOval(x,yHighestValue,6,6);
+            addVoronoiDot(x,yHighestValue);
+        }
         listXGreaterThanDotX.clear();
         listXSmallerThanDotX.clear();
     }
     //---------------------------------------------------------------------
     public void calculateDotsForBeachLine(Dot dot, double x, double y, ArrayList<Dot> listXGreaterThanDotX, ArrayList<Dot> listXSmallerThanDotX){
         if(valueForLine>y){
-            if(dot.getX() > x){
-                listXGreaterThanDotX.add(new Dot(x,y));
-            } else if (dot.getX() < x) {
-                listXSmallerThanDotX.add(new Dot(x,y));
+//            System.out.println(" X Value for calc Dot: "+x);
+            if(x>=0 && x<=maxX){
+                if(x<dot.getX()){
+                    listXSmallerThanDotX.add(new Dot(x,y));
+                } else if (x>dot.getX()) {
+                    listXGreaterThanDotX.add(new Dot(x,y));
+                }
             }
         }
     }
