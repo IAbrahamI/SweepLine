@@ -143,7 +143,7 @@ public class Controller{
         Comparator<Dot> dotComparator = Comparator.comparing(Dot::getY).thenComparing(Dot::getX);
         Collections.sort(dots,dotComparator);
     }
-    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------C
     public double getMaxYValue(){
         double maxValue = 0;
         for(int i=0;i< dots.size();i++){
