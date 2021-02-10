@@ -12,6 +12,15 @@ public class Parabola {
         this.u = u;
         this.v = v;
     }
+
+    //Parabelgleichung aus Brennpunkt dot. und Leitlinie value
+    public static Parabola calculateParabola(Dot dot, int value){
+        double a = 1 / (2 * (dot.getY() - value));
+        double u = dot.getX();
+        double v = 0.5 * (dot.getY() + value);
+        return new Parabola(a,u,v);
+    }
+
     //------------------------------------------------------------------------
     public double getA() {
         return a;
