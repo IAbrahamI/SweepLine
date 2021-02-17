@@ -82,7 +82,7 @@ public class Controller{
                 sortArcs(); //Unklar ob notwendig bei dieser Implementierung ?
                 update_arcs(); // neu by trommsdorff
                 drawarcs();
-                //drawLines();
+                drawLines();
             }
         };
         timer.start();
@@ -115,9 +115,7 @@ public class Controller{
         Dot dot_right=new Dot(0,0);
         // Check for a new Event
         for (Dot d: dots){
-
             //Neuer Punkt bei der sweepline? Check ob der dot_y Wert plus/minus 1 von der sweepline entfernt ist
-
             if (d.getY()<valueForLine+1 && d.getY()>valueForLine-1){
                 Parabola par_new = Parabola.calculateParabola(d,valueForLine);
                 parabolas.add(par_new); // kann wahrscheinlich gelöscht werden
@@ -132,7 +130,7 @@ public class Controller{
                     double xtest=arc_new.getuValue();  //x Koord vom neuen Punkt
                     //suche den arc den es zu bearbeiten gilt. Das ist der Arc in welchem xtest liegt
                     for (Arc ar:arcs){
-                        if (ar.getxMinValue()<xtest && ar.getxMaxValue()>=xtest){
+                        if (ar.getxMinValue()<xtest && ar.getxMaxValue()>xtest){
                             //dieser Arc muss verändert werden
                             changearc=ar;
                             dot_left=Arc.intersect_arcs_left(changearc,arc_new);
@@ -148,7 +146,10 @@ public class Controller{
                     arcs.add(new Arc(x_1,x_2,changearc.getaValue(),changearc.getuValue(),changearc.getvValue()));
                     arcs.add(new Arc(x_2,x_3,arc_new.getaValue(),arc_new.getuValue(),arc_new.getvValue()));
                     arcs.add(new Arc(x_3,x_4,changearc.getaValue(),changearc.getuValue(),changearc.getvValue()));
-                    // arcs.remove(changearc);  // ist das nötig oder nicht glaube schon
+
+                    //Add Voronoi Dots for line
+
+                    arcs.remove(changearc);  // ist das nötig oder nicht glaube schon
                 }
             }
         }
@@ -180,7 +181,6 @@ public class Controller{
 
 
 //---------------------------------------------------------------------
-
     public void refreshCanvas() {
         gc.setFill(Color.WHITE);
         gc.fillRect(minX, minY, maxX, maxY);
@@ -200,8 +200,7 @@ public class Controller{
             }
         }
     }
-//---------------------------------------------------------------------
-
+    //---------------------------------------------------------------------
     public void drawSweepLine() {
         gc.setStroke(Color.RED);
         gc.strokeLine(minX, valueForLine, maxX, valueForLine);
@@ -209,16 +208,15 @@ public class Controller{
     //---------------------------------------------------------------------
     public void drawDots() {
         for (Dot d : dots) {
-            gc.setStroke(Color.GREEN);
+            gc.setStroke(Color.BLUE);
             gc.strokeOval(d.getX(), d.getY(), 3, 3);
         }
     }
-
     //---------------------------------------------------------------------
     public void drawLines(){
         for(Dot d: voronoiDots){
             gc.setStroke(Color.BLACK);
-            gc.strokeOval(d.getX(),d.getY(),1,1);
+            gc.strokeOval(d.getX(),d.getY(),6,6);
         }
     }
     //---------------------------------------------------------------------
@@ -245,7 +243,7 @@ public class Controller{
     }
     //---------------------------------------------------------------------
     public void sortDots(){
-        Comparator<Dot> dotComparator = Comparator.comparing(Dot::getX).thenComparing(Dot::getY); //tf_new xy vertauscht
+        Comparator<Dot> dotComparator = Comparator.comparing(Dot::getY); //tf_new xy vertauscht
         Collections.sort(dots,dotComparator);
     }
 
