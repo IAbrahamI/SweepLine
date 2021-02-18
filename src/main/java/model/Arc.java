@@ -49,7 +49,7 @@ public class   Arc implements Comparable<Arc> {
 
     //-----------------------------------------------------------------------------
     // trommsdorff neu bestimmt die Schnittpunkte von Parabeln aus a1,u1,v1 und a2,u2,v2 Formeln mit wolfram alph gefuneden siehe bild
-    public static Dot intersect_arcs_left(Arc arc1,Arc arc2){
+    public static Dot intersect_arcs_left(Arc arc1, Arc arc2){
         double a1=arc1.getaValue();
         double u1=arc1.getuValue();
         double v1=arc1.getvValue();
@@ -66,7 +66,7 @@ public class   Arc implements Comparable<Arc> {
         double y_left=a1*(x_left-u1)*(x_left-u1)+v1;
         return new Dot(x_left,y_left);
     }
-    public static Dot intersect_arcs_right(Arc arc1,Arc arc2){
+    public static Dot intersect_arcs_right(Arc arc1, Arc arc2){
         double a1=arc1.getaValue();
         double u1=arc1.getuValue();
         double v1=arc1.getvValue();
@@ -83,8 +83,6 @@ public class   Arc implements Comparable<Arc> {
         double y_right=a1*(x_right-u1)*(x_right-u1)+v1;
         return new Dot(x_right,y_right);
     }
-
-
     public int compareTo(Arc arc) {
         return (int) (this.xMinValue-arc.getxMinValue());
     }

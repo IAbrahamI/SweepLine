@@ -141,14 +141,11 @@ public class Controller{
                     double x_1=changearc.getxMinValue();
                     double x_2=dot_left.getX();
                     double x_3=dot_right.getX();
-                    //if (x_2 > x_3){ x_3=x_2;x_2=dot_right.getX();} //wenn es nicht stimmen sollte
                     double x_4=changearc.getxMaxValue();
+
                     arcs.add(new Arc(x_1,x_2,changearc.getaValue(),changearc.getuValue(),changearc.getvValue()));
                     arcs.add(new Arc(x_2,x_3,arc_new.getaValue(),arc_new.getuValue(),arc_new.getvValue()));
                     arcs.add(new Arc(x_3,x_4,changearc.getaValue(),changearc.getuValue(),changearc.getvValue()));
-
-                    //Add Voronoi Dots for line
-
                     arcs.remove(changearc);  // ist das nötig oder nicht glaube schon
                 }
             }
@@ -169,10 +166,11 @@ public class Controller{
             for (int j=0;j<k-1;j++){
                 Arc eins=arcs.get(j);
                 Arc zwei=arcs.get(j+1);
+
                 Dot dot_left=Arc.intersect_arcs_left(eins,zwei);
-                //Dot dot_right=Arc.intersect_arcs_right(eins,zwei);  //nicht nötig?
+//                Dot dot_right=Arc.intersect_arcs_right(eins,zwei);  //nicht nötig?
                 double x_new=dot_left.getX();
-                //double y_new=dot_left.getX();
+//                double y_new=dot_left.getX();
                 arcs.get(j).setxMaxValue(x_new);
                 arcs.get(j+1).setxMinValue(x_new);
             }
@@ -197,6 +195,9 @@ public class Controller{
 
             for(double i=x_min;i<=x_max;i++){
                 gc.strokeOval(i,a*Math.pow((i-u),2)+v,1,1);
+                if(i==x_min || i == x_max){
+                    addVoronoiDot(i,a*Math.pow((i-u),2)+v);
+                }
             }
         }
     }
@@ -216,7 +217,7 @@ public class Controller{
     public void drawLines(){
         for(Dot d: voronoiDots){
             gc.setStroke(Color.BLACK);
-            gc.strokeOval(d.getX(),d.getY(),6,6);
+            gc.strokeOval(d.getX(),d.getY(),1,1);
         }
     }
     //---------------------------------------------------------------------
@@ -225,8 +226,27 @@ public class Controller{
 
     // new tf Sort arcs-----------------------------------------------------
     public void sortArcs(){
-        Comparator<Arc> arcComparator = Comparator.comparing(Arc::getxMinValue);
-        Collections.sort(arcs,arcComparator);
+        double r = 0;
+//        for(int i = 0; i< arcs.size();i++){
+//            for (int j = 0; j<arcs.size();j++){
+//                double a1 = arcs.get(i).getaValue();
+//                double u1 = arcs.get(i).getuValue();
+//                double v1 = arcs.get(i).getvValue();
+//                double x_min1=arcs.get(i).getxMinValue();
+//                double x_max1=arcs.get(i).getxMaxValue();
+////                double sPoint1 =
+//
+//                double a2 = arcs.get(j).getaValue();
+//                double u2 = arcs.get(j).getuValue();
+//                double v2 = arcs.get(j).getvValue();
+//                double x_min2=arcs.get(j).getxMinValue();
+//                double x_max2=arcs.get(j).getxMaxValue();
+//
+//
+//           }
+//        }
+//        Comparator<Arc> arcComparator = Comparator.comparing(Arc::getxMinValue);
+//        Collections.sort(arcs,arcComparator);
     }
     public void addDot(int x, int y, double minX, double maxX) {
         dots.add(new Dot(x, y, minX, maxX));
