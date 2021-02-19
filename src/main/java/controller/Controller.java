@@ -79,7 +79,6 @@ public class Controller{
                 drawSweepLine();
                 new_arc_event(); // neu by trommsdorff
                 loss_arc_event(); // neu by trommsdorff
-                sortArcs(); //Unklar ob notwendig bei dieser Implementierung ?
                 update_arcs(); // neu by trommsdorff
                 drawarcs();
                 drawLines();
@@ -116,31 +115,32 @@ public class Controller{
         // Check for a new Event
         for (Dot d: dots){
             //Neuer Punkt bei der sweepline? Check ob der dot_y Wert plus/minus 1 von der sweepline entfernt ist
-            if (d.getY()<valueForLine+1 && d.getY()>valueForLine-1){
+            if (d.getY()<valueForLine+0.2 && d.getY()>valueForLine-0.2){
                 Parabola par_new = Parabola.calculateParabola(d,valueForLine);
-                parabolas.add(par_new); // kann wahrscheinlich gelöscht werden
                 //der neue Punkt erzeugt einen neuen Arc. Die grenzen zunächst minX und maxX
                 Arc arc_new = new Arc(minX,maxX,par_new.getA(),par_new.getU(),par_new.getV());
-
+                double xtest=arc_new.getuValue();  //x Koord vom neuen Punkt
                 //Sonderfall, wenn noch kein Arc vorhanden ist
                 if (currentAmountOfArcs<1){
                     // erster Arc
                     arcs.add(arc_new);
                 } else {
-                    double xtest=arc_new.getuValue();  //x Koord vom neuen Punkt
                     //suche den arc den es zu bearbeiten gilt. Das ist der Arc in welchem xtest liegt
                     for (Arc ar:arcs){
                         if (ar.getxMinValue()<xtest && ar.getxMaxValue()>xtest){
-                            //dieser Arc muss verändert werden
-                            changearc=ar;
-                            dot_left=Arc.intersect_arcs_left(changearc,arc_new);
-                            dot_right=Arc.intersect_arcs_right(changearc,arc_new);
+                            changearc=ar;   //dieser Arc muss verändert werden
                         }
                     }
+                    dot_left=Arc.intersect_arcs_left(changearc,arc_new);
+                    dot_right=Arc.intersect_arcs_right(changearc,arc_new);
                     //die dreien neuen Arcs werden jetzt festgelegt
                     double x_1=changearc.getxMinValue();
-                    double x_2=dot_left.getX();
-                    double x_3=dot_right.getX();
+                    double x_2=arc_new.getuValue()-0.5;
+                    double x_3=arc_new.getuValue()+0.5;
+                    if(x_2>x_3){
+                        x_3 = dot_right.getX();
+                        x_2 = dot_left.getX();
+                    }
                     double x_4=changearc.getxMaxValue();
 
                     arcs.add(new Arc(x_1,x_2,changearc.getaValue(),changearc.getuValue(),changearc.getvValue()));
@@ -162,23 +162,24 @@ public class Controller{
             ar.setvValue(ar.getvValue()+0.5);
         }
         //Schnittpunkte müssen auch angepasst werden
+        sortArcs();
         if (k>1){
             for (int j=0;j<k-1;j++){
                 Arc eins=arcs.get(j);
                 Arc zwei=arcs.get(j+1);
-
                 Dot dot_left=Arc.intersect_arcs_left(eins,zwei);
-//                Dot dot_right=Arc.intersect_arcs_right(eins,zwei);  //nicht nötig?
+
                 double x_new=dot_left.getX();
-//                double y_new=dot_left.getX();
+                double y_new=dot_left.getY();
                 arcs.get(j).setxMaxValue(x_new);
                 arcs.get(j+1).setxMinValue(x_new);
+                addVoronoiDot(x_new,y_new);
             }
+            arcs.get(k-1).setxMaxValue(maxX);
+            arcs.get(0).setxMinValue(minX);
         }
     }
-
-
-//---------------------------------------------------------------------
+    //---------------------------------------------------------------------
     public void refreshCanvas() {
         gc.setFill(Color.WHITE);
         gc.fillRect(minX, minY, maxX, maxY);
@@ -195,9 +196,6 @@ public class Controller{
 
             for(double i=x_min;i<=x_max;i++){
                 gc.strokeOval(i,a*Math.pow((i-u),2)+v,1,1);
-                if(i==x_min || i == x_max){
-                    addVoronoiDot(i,a*Math.pow((i-u),2)+v);
-                }
             }
         }
     }
@@ -226,27 +224,8 @@ public class Controller{
 
     // new tf Sort arcs-----------------------------------------------------
     public void sortArcs(){
-        double r = 0;
-//        for(int i = 0; i< arcs.size();i++){
-//            for (int j = 0; j<arcs.size();j++){
-//                double a1 = arcs.get(i).getaValue();
-//                double u1 = arcs.get(i).getuValue();
-//                double v1 = arcs.get(i).getvValue();
-//                double x_min1=arcs.get(i).getxMinValue();
-//                double x_max1=arcs.get(i).getxMaxValue();
-////                double sPoint1 =
-//
-//                double a2 = arcs.get(j).getaValue();
-//                double u2 = arcs.get(j).getuValue();
-//                double v2 = arcs.get(j).getvValue();
-//                double x_min2=arcs.get(j).getxMinValue();
-//                double x_max2=arcs.get(j).getxMaxValue();
-//
-//
-//           }
-//        }
-//        Comparator<Arc> arcComparator = Comparator.comparing(Arc::getxMinValue);
-//        Collections.sort(arcs,arcComparator);
+        Comparator<Arc> arcComparator = Comparator.comparing(Arc::getxMinValue);
+        Collections.sort(arcs,arcComparator);
     }
     public void addDot(int x, int y, double minX, double maxX) {
         dots.add(new Dot(x, y, minX, maxX));
@@ -266,33 +245,29 @@ public class Controller{
         Comparator<Dot> dotComparator = Comparator.comparing(Dot::getY); //tf_new xy vertauscht
         Collections.sort(dots,dotComparator);
     }
-
-    //---------------------------------------------------------------------
-    public double getMaxYValue(){
-        double maxValue = 0;
-        for(int i=0;i< dots.size();i++){
-            if(dots.get(i).getY()>maxValue){
-                maxValue = dots.get(i).getY();
-            }
-        }
-        return maxValue;
-    }
     //---------------------------------------------------------------------
     public void createDots(Calculation c) {
         int amountOfDots = Integer.parseInt(points.getText());
+
         for (int i = 0; i < amountOfDots; i++) {
-            int xValue = c.createRandomXDot(maxX);
-            int yValue = c.createRandomYDot(maxY);
-            this.addDot(xValue, yValue,minX,maxX);
+                int xValue = c.createRandomXDot(maxX);
+                int yValue = c.createRandomYDot(maxY);
+                verifyDots(yValue,c);
+                this.addDot(xValue, yValue,minX,maxX);
         }
         sortDots();
     }
     //---------------------------------------------------------------------
-    public void storeParabola(double a, double u, double v){
-        this.parabolas.get(parabolas.size()-1).setA(a);
-        this.parabolas.get(parabolas.size()-1).setU(u);
-        this.parabolas.get(parabolas.size()-1).setV(v);
+    public int verifyDots(int yValue, Calculation c){
+        for(Dot d: dots){
+            if(d.getY()==yValue){
+                yValue = c.createRandomYDot(maxY);
+            }else{
+            }
+        }
+        return yValue;
     }
+    //---------------------------------------------------------------------
 }
 
 
