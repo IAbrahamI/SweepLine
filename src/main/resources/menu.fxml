@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import javafx.geometry.*?>
+<?import java.net.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.canvas.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import java.net.URL?>
+
+<BorderPane fx:id="pane" prefHeight="799.0" prefWidth="809.0" stylesheets="@controller.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+   <left>
+      <VBox prefHeight="430.0" prefWidth="150.0" style="-fx-background-color: #303030;" BorderPane.alignment="CENTER">
+         <children>
+            <Button mnemonicParsing="false" onMouseClicked="#fxToMenu" prefHeight="60.0" prefWidth="181.0" style="-fx-background-color: transparent; -fx-text-fill: #f0f0f0;">
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+               <graphic>
+                  <ImageView fitHeight="53.0" fitWidth="85.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@menu.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button mnemonicParsing="false" onMouseClicked="#fxToVoronoi" prefHeight="60.0" prefWidth="181.0" style="-fx-background-color: transparent; -fx-text-fill: #f0f0f0;" text="Voronoi">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+            <Button mnemonicParsing="false" onMouseClicked="#fxToText" prefHeight="60.0" prefWidth="181.0" style="-fx-background-color: transparent; -fx-text-fill: #f0f0f0;" text="Beschreibung">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+            </Button>
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="460.0" fitWidth="460.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@voronoistatisch.png" />
+               </image>
+            </ImageView>
+            <Label text="Voronoi Diagramm" textFill="WHITE">
+               <font>
+                  <Font size="44.0" />
+               </font>
+            </Label>
+            <Label text="Abraham, Simon T, Redon" textFill="WHITE">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Label>
+         </children>
+      </VBox>
+   </center>
+</BorderPane>

@@ -3,20 +3,33 @@ package controller;
 import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import model.Arc;
 import model.Dot;
 import model.Parabola;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Controller{
+
+    @FXML
+    private BorderPane pane;
+
     @FXML
     private Button button;
     @FXML
@@ -31,13 +44,42 @@ public class Controller{
     // y-value for sweepline
     private int valueForLine = 0;
     private boolean isStopped = false;
+//    private VoronoiImageController vc = new VoronoiImageController();
     private ArrayList<Dot> dots = new ArrayList<Dot>();
     private ArrayList<Arc> arcs = new ArrayList<Arc>();
     private ArrayList<Dot> voronoiDots = new ArrayList<Dot>();
     private ArrayList<Parabola> parabolas = new ArrayList<Parabola>();
     //---------------------------------------------------------------------
     @FXML
+    void fxToMenu(MouseEvent event) {
+        //erzeugt ein statisches Voronoi Diagramm
+        //vc.setVisible(false);
+        loadUI("firstPage.fxml");
+    }
+
+    @FXML
+    void fxToVoronoi(MouseEvent event) {
+        loadUI("voronoi.fxml");
+    }
+
+    @FXML
+    void fxToText(MouseEvent event) {
+        loadUI("about.fxml");
+    }
+    public void loadUI(String ui){
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(getClass().getClassLoader().getResource(ui));
+        } catch (IOException ex){
+            Logger.getLogger(Controller.class.getName()).log(Level.SEVERE,null,ex);
+        }
+        pane.setCenter(root);
+    }
+
+    @FXML
     void startAction(ActionEvent event) {
+
+        isStopped = false;
         if (!points.getText().matches("([2-9]|1[0-9]|20)")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Fehler");
@@ -66,28 +108,26 @@ public class Controller{
     // Hauptprogramm
     // changed by trommsdorff
     //---------------------------------------------------------------------
-
     public void drawVoronoi(Calculation c) {
         gc = canvas.getGraphicsContext2D();
         createDots(c);
         final AnimationTimer timer = new AnimationTimer() {
             @Override
             public void handle(long nanotimes) {
-                valueForLine++;
+                if(!isStopped){
+                    valueForLine++;
+                }
                 refreshCanvas();
                 drawDots();
                 drawSweepLine();
-                new_arc_event(); // neu by trommsdorff
-                loss_arc_event(); // neu by trommsdorff
-                update_arcs(); // neu by trommsdorff
+                new_arc_event();
+                loss_arc_event();
+                update_arcs();
                 drawarcs();
                 drawLines();
             }
         };
         timer.start();
-        if(this.isStopped==true){
-            timer.stop();
-        }
     }
     //---------------------------------------------------------------------
     // Unterprogramme

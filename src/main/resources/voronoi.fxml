@@ -19,8 +19,8 @@
         <Button fx:id="start" defaultButton="true" layoutX="271.0" layoutY="639.0" mnemonicParsing="false" onAction="#startAction" prefHeight="32.0" prefWidth="118.0" text="Start" />
       <Button fx:id="stop" layoutX="396.0" layoutY="639.0" mnemonicParsing="false" onAction="#endAction" prefHeight="32.0" prefWidth="118.0" text="Stop" />
       <TextField fx:id="points" layoutX="126.0" layoutY="643.0" prefHeight="25.0" prefWidth="40.0" />
-      <Label layoutX="70.0" layoutY="647.0" styleClass="label" text="Punkte:" />
-      <Label layoutX="209.0" layoutY="33.0" prefHeight="32.0" prefWidth="212.0" styleClass="label" text="Voronoi mit Parabeln">
+      <Label layoutX="70.0" layoutY="647.0" styleClass="label" text="Punkte:" textFill="WHITE" />
+      <Label layoutX="189.0" layoutY="39.0" prefHeight="32.0" prefWidth="212.0" styleClass="label" text="Voronoi mit Parabeln" textFill="WHITE">
          <font>
             <Font size="22.0" />
          </font>

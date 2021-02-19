@@ -2,9 +2,8 @@
     -fx-background-color: #222626;
 }
 .canvas-section{
-    -fx-background-color: #9921cd;
     -fx-border-color: black;
 }
-.label{
-    -fx-text-fill: white;
+.button:hover{
+    -fx-scale-y: 1.05;
 }
