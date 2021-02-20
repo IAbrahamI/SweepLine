@@ -1,9 +1,11 @@
-.root{
-    -fx-background-color: #222626;
-}
-.canvas-section{
-    -fx-border-color: black;
+.button{
+    -fx-background-color:  #303030;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
 }
 .button:hover{
-    -fx-scale-y: 1.05;
+    -fx-background-color: #a6a6a6;
+    -fx-text-fill: white;
 }

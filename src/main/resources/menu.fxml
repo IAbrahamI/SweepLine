@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.geometry.*?>
 <?import java.net.*?>
@@ -15,11 +16,11 @@
 <?import javafx.scene.control.Label?>
 <?import java.net.URL?>
 
-<BorderPane fx:id="pane" prefHeight="799.0" prefWidth="809.0" stylesheets="@controller.css" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+<BorderPane fx:id="pane" prefHeight="799.0" prefWidth="809.0" style="-fx-background-color: #222626;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
    <left>
       <VBox prefHeight="430.0" prefWidth="150.0" style="-fx-background-color: #303030;" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onMouseClicked="#fxToMenu" prefHeight="60.0" prefWidth="181.0" style="-fx-background-color: transparent; -fx-text-fill: #f0f0f0;">
+            <Button mnemonicParsing="false" onMouseClicked="#fxToMenu" prefHeight="60.0" prefWidth="181.0" stylesheets="@controller.css">
                <VBox.margin>
                   <Insets />
                </VBox.margin>
@@ -31,21 +32,36 @@
                   </ImageView>
                </graphic>
             </Button>
-            <Button mnemonicParsing="false" onMouseClicked="#fxToVoronoi" prefHeight="60.0" prefWidth="181.0" style="-fx-background-color: transparent; -fx-text-fill: #f0f0f0;" text="Voronoi">
+            <Button mnemonicParsing="false" onMouseClicked="#fxToVoronoi" prefHeight="60.0" prefWidth="181.0" stylesheets="@controller.css" text="Voronoi">
+               <VBox.margin>
+                  <Insets top="10.0" />
+               </VBox.margin>
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor>
+            </Button>
+            <Button mnemonicParsing="false" onMouseClicked="#fxToText" prefHeight="60.0" prefWidth="181.0" stylesheets="@controller.css" text="Überblick">
                <VBox.margin>
                   <Insets top="10.0" />
                </VBox.margin>
             </Button>
-            <Button mnemonicParsing="false" onMouseClicked="#fxToText" prefHeight="60.0" prefWidth="181.0" style="-fx-background-color: transparent; -fx-text-fill: #f0f0f0;" text="Beschreibung">
+            <Button fx:id="closeButton" mnemonicParsing="false" onAction="#fxClose" prefHeight="95.0" prefWidth="150.0" stylesheets="@controller.css">
+               <graphic>
+                  <ImageView fitHeight="37.0" fitWidth="44.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@power-128.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
                <VBox.margin>
-                  <Insets top="10.0" />
+                  <Insets top="550.0" />
                </VBox.margin>
             </Button>
          </children>
       </VBox>
    </left>
    <center>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" BorderPane.alignment="CENTER">
+      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0" style="-fx-background-color: #222626;" BorderPane.alignment="CENTER">
          <children>
             <ImageView fitHeight="460.0" fitWidth="460.0" pickOnBounds="true" preserveRatio="true">
                <image>

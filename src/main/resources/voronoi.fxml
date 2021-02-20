@@ -13,20 +13,17 @@
 <?import javafx.scene.control.Label?>
 <?import java.net.URL?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="699.0" prefWidth="589.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="699.0" prefWidth="589.0" style="-fx-background-color: #222626;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.Controller">
     <children>
-        <Canvas fx:id="canvas" height="500.0" layoutX="70.0" layoutY="100.0" styleClass="canvas-section" width="450.0" />
-        <Button fx:id="start" defaultButton="true" layoutX="271.0" layoutY="639.0" mnemonicParsing="false" onAction="#startAction" prefHeight="32.0" prefWidth="118.0" text="Start" />
-      <Button fx:id="stop" layoutX="396.0" layoutY="639.0" mnemonicParsing="false" onAction="#endAction" prefHeight="32.0" prefWidth="118.0" text="Stop" />
-      <TextField fx:id="points" layoutX="126.0" layoutY="643.0" prefHeight="25.0" prefWidth="40.0" />
-      <Label layoutX="70.0" layoutY="647.0" styleClass="label" text="Punkte:" textFill="WHITE" />
+        <Canvas fx:id="canvas" height="500.0" layoutX="70.0" layoutY="153.0" styleClass="canvas-section" width="450.0" />
+        <Button fx:id="start" defaultButton="true" layoutX="227.0" layoutY="101.0" mnemonicParsing="false" onAction="#startAction" prefHeight="32.0" prefWidth="118.0" text="Start" />
+      <Button fx:id="stop" layoutX="381.0" layoutY="100.0" mnemonicParsing="false" onAction="#endAction" prefHeight="32.0" prefWidth="118.0" text="Stop" />
+      <TextField fx:id="points" layoutX="136.0" layoutY="104.0" prefHeight="25.0" prefWidth="40.0" />
+      <Label layoutX="86.0" layoutY="108.0" styleClass="label" text="Punkte:" textFill="WHITE" />
       <Label layoutX="189.0" layoutY="39.0" prefHeight="32.0" prefWidth="212.0" styleClass="label" text="Voronoi mit Parabeln" textFill="WHITE">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
     </children>
-    <stylesheets>
-        <URL value="@controller.css" />
-    </stylesheets>
 </AnchorPane>

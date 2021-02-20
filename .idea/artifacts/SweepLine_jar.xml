@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SweepLine:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SweepLine_jar</output-path>
+    <root id="archive" name="SweepLine.jar">
+      <element id="module-output" name="SweepLine" />
+    </root>
+  </artifact>
+</component>

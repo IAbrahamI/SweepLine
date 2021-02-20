@@ -17,7 +17,6 @@ import javafx.stage.Stage;
 import model.Arc;
 import model.Dot;
 import model.Parabola;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +29,8 @@ public class Controller{
     @FXML
     private BorderPane pane;
 
+    @FXML
+    private Button closeButton;
     @FXML
     private Button button;
     @FXML
@@ -62,6 +63,11 @@ public class Controller{
         loadUI("voronoi.fxml");
     }
 
+    @FXML
+    void fxClose(ActionEvent event) {
+        Stage stage = (Stage) pane.getScene().getWindow();
+        stage.close();
+    }
     @FXML
     void fxToText(MouseEvent event) {
         loadUI("about.fxml");
@@ -106,7 +112,6 @@ public class Controller{
     }
     //---------------------------------------------------------------------
     // Hauptprogramm
-    // changed by trommsdorff
     //---------------------------------------------------------------------
     public void drawVoronoi(Calculation c) {
         gc = canvas.getGraphicsContext2D();
@@ -186,7 +191,7 @@ public class Controller{
                     arcs.add(new Arc(x_1,x_2,changearc.getaValue(),changearc.getuValue(),changearc.getvValue()));
                     arcs.add(new Arc(x_2,x_3,arc_new.getaValue(),arc_new.getuValue(),arc_new.getvValue()));
                     arcs.add(new Arc(x_3,x_4,changearc.getaValue(),changearc.getuValue(),changearc.getvValue()));
-                    arcs.remove(changearc);  // ist das nötig oder nicht glaube schon
+                    arcs.remove(changearc);
                 }
             }
         }
@@ -261,8 +266,6 @@ public class Controller{
     //---------------------------------------------------------------------
     // Storage and Creation Methods
     //---------------------------------------------------------------------
-
-    // new tf Sort arcs-----------------------------------------------------
     public void sortArcs(){
         Comparator<Arc> arcComparator = Comparator.comparing(Arc::getxMinValue);
         Collections.sort(arcs,arcComparator);
@@ -282,7 +285,7 @@ public class Controller{
     }
     //---------------------------------------------------------------------
     public void sortDots(){
-        Comparator<Dot> dotComparator = Comparator.comparing(Dot::getY); //tf_new xy vertauscht
+        Comparator<Dot> dotComparator = Comparator.comparing(Dot::getY);
         Collections.sort(dots,dotComparator);
     }
     //---------------------------------------------------------------------
@@ -309,5 +312,3 @@ public class Controller{
     }
     //---------------------------------------------------------------------
 }
-
-
