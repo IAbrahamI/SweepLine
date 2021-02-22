@@ -107,7 +107,7 @@ public class Controller{
         this.parabolas.clear();
         this.arcs.clear();
         this.dots.clear();
-        this.valueForLine=0;
+        this.valueForLine=-1;
         this.isStopped=true;
     }
     //---------------------------------------------------------------------
@@ -273,15 +273,8 @@ public class Controller{
     public void addDot(int x, int y, double minX, double maxX) {
         dots.add(new Dot(x, y, minX, maxX));
     }
-    public void addParabola(double a, double u, double v){
-        parabolas.add(new Parabola(a,u,v));
-    }
     public void addVoronoiDot(double x, double y){
         voronoiDots.add(new Dot(x,y));
-    }
-    //**_New
-    public void addArc(double minX, double maxX,double a, double u, double v){
-        arcs.add(new Arc(minX,maxX,a,u,v));
     }
     //---------------------------------------------------------------------
     public void sortDots(){
@@ -305,7 +298,6 @@ public class Controller{
         for(Dot d: dots){
             if(d.getY()==yValue){
                 yValue = c.createRandomYDot(maxY);
-            }else{
             }
         }
         return yValue;
